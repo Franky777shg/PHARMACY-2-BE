@@ -23,9 +23,26 @@ module.exports = {
             res.status(200).send(result)
         })
     },
+    // keeplogin: (req,res) => {
+    //     console.log(req.user)
+    //     // const getUser = `select * from users u
+    //     // join profile p
+    //     // on u.idusers = p.idusers
+    //     // where u.idusers =  ${db.escape(req.user.idusers)}`
+    //     const getUser = `select * from user where iduser     = ${db.escape(req.params.id)}`
+    //     db.query(getUser, (err,result) => {
+    //         if(err) {
+    //             console.log(err)
+    //             res.status(400).send(err)
+    //         }
+    //         // res.status(200).send(result[0])
+    //         console.log(result)
+    //         res.status(200).send(result)
+    //     })
+    // },
     forgotpw: (req, res) => {
-        const { email } = req.body;
-        const checkEmail = `select * from user where email = ${db.escape(email)};`
+        const { emailuser } = req.body;
+        const checkEmail = `select * from user where email = ${db.escape(emailuser)};`
         console.log(checkEmail)
         db.query(checkEmail, (err, result) => {
            if (err) {
@@ -47,11 +64,11 @@ module.exports = {
                     let token = createToken({ iduser: result[0].iduser })
                     console.log(token)
                     let info = transporter.sendMail({
-                        from: '"ADMIN" <csdvfsd@gmail.com>', //sender address
-                        to: `${email}`, //list of receivers
-                        subject: `Forget Password`, //Subject line
+                        from: `"ADMIN" <${EMAIL}>`, //sender address
+                        to: `${emailuser}`, //list of receivers
+                        subject: `Forgot Password`, //Subject line
                         text: `Hello ${result[0].username}`, //plain text body
-                        html: `<a href="http://localhost:3000/forgetpw/${token}">Please click here to reset your password</a>` //html body
+                        html: `<a href="http://localhost:3000/changepw/${token}">Please click here to reset your password</a>` //html body
                     })
                     .then( res2 => {
                         console.log(res2)
@@ -77,6 +94,18 @@ module.exports = {
         })
     },
     changepw: (req, res) => {
+        console.log(req.user)
+        const {newPass, confPass} = req.body;
+        const updatePw = `UPDATE user SET password = ${db.escape(confPass)} WHERE iduser = ${db.escape(req.user.iduser)};`
+        if (newPass === confPass){
+            db.query(updatePw, (err,result) => {
+                if (err) {
+                    console.log(err)
+                    res.status(400).send(err)
+                 }
+               res.status(200).send(result)
+            })
+        }
     },
     addUser: (req, res) => {
         const { username, email, password, fullname, gender, address, age, role, profile_picture, verify } = req.body

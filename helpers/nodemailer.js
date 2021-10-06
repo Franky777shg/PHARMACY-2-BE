@@ -1,7 +1,6 @@
 const nodemailer = require('nodemailer')
 const KEY = process.env.GOOGLE_KEY
 const EMAIL = process.env.EMAIL
-
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
