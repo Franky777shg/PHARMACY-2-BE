@@ -26,14 +26,14 @@ module.exports = {
         const checkEmail = `select * from user where email = ${db.escape(email)};`
         console.log(checkEmail)
         db.query(checkEmail, (err, result) => {
-            if (err) {
+           if (err) {
                 console.log(err)
                 res.status(400).send(err)
-            }
-            else if (result.length === 0) {
+           }
+           else if (result.length === 0) {
                 res.status(400).send("User with this email does not exists.")
-            }
-            else if (result.length !== 0) {
+           }
+           else if (result.length !== 0) {
                 console.log(result)
                 // const getUser = `select username from user where email = ${db.escape(email)};`
                 // db.query(getUser, (err2, result2) => {
@@ -63,8 +63,32 @@ module.exports = {
 
         })
     },
+    getRegister: (req, res) => {
+        let getQuery = `select * from user;`
+
+        db.query(getQuery, (err, result) => {
+            if (err) {
+               console.log(err)
+               res.status(400).send(err)
+            }
+          res.status(200).send(result)
+        })
+    },
     changepw: (req, res) => {
+    },
+    addUser : (req, res) => {
+        const { username, email, password, fullname, gender, address, age, role, profile_picture, verify} = req.body
 
+        let addQuery = `insert into user (username, email, password, fullname, gender, address, age, role, profile_picture, verify)
+        values (${db.escape(username)}, ${db.escape(email)}, ${db.escape(password)}, ${db.escape(fullname)}, ${db.escape(gender)}, ${db.escape(address)}, ${db.escape(age)}, ${db.escape(role)}, ${db.escape(profile_picture)}, ${db.escape(verify)});`
+
+        db.query(addQuery, (err, result) => {
+            if (err) {
+                console.log(err)
+                res.status(400).send(err)
+            }
+
+            res.status(200).send(result)
+        })
     }
-
 }
