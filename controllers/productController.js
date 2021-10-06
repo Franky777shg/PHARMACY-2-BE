@@ -236,5 +236,17 @@ module.exports = {
                 })
             })
         }
+    },
+    detailProduct: (req, res) => {
+        let detailQuery = `select * from produk_satuan where idproduk = ${req.params.idproduct};`
+
+        db.query(detailQuery, (err, resultDetailQuery) => {
+            if (err) {
+                console.log(err)
+                res.status(400).send(err)
+            }
+
+            res.status(200).send(resultDetailQuery[0])        
+        })
     }
 }
