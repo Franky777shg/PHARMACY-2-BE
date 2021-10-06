@@ -131,5 +131,122 @@ module.exports = {
                 })
             })
         }
+    },
+    sortProduct: (req, res) => {
+        const { name, category, page, order, sort } = req.body
+
+        if (name && category) {
+            console.log(`filterByBoth`)
+            let filterByBoth = `select * from produk_satuan where nama like '%${name}%' and kategori = '${category}';`
+
+            db.query(filterByBoth, (err, resultFilterByBoth) => {
+                if (err) {
+                    console.log(err)
+                    res.status(400).send(err)
+                }
+
+                let jumlahSemuaProdukBoth = resultFilterByBoth.length
+                let maxPageBoth = Math.ceil(jumlahSemuaProdukBoth/10)
+                let offsetBoth = (page * 10) - 10
+
+                let paginationBoth = `select * from produk_satuan where nama like '%${name}%' and kategori = '${category}' order by ${order} ${sort} limit 10 offset ${offsetBoth};`
+
+                db.query(paginationBoth, (err, resultPaginationBoth) => {
+                    if (err) {
+                        console.log(err)
+                        res.status(400).send(err)
+                    }
+    
+                    res.status(200).send([...resultPaginationBoth, maxPageBoth])
+                })
+            })
+        } else if (!name && !category) {
+            console.log(`filterByNone`)
+            let filterByNone = `select * from produk_satuan;`
+
+            db.query(filterByNone, (err, resultFilterByNone) => {
+                if (err) {
+                    console.log(err)
+                    res.status(400).send(err)
+                }
+
+                let jumlahSemuaProdukNone = resultFilterByNone.length
+                let maxPageNone = Math.ceil(jumlahSemuaProdukNone/10)
+                let offsetNone = (page * 10) - 10
+
+                let paginationNone = `select * from produk_satuan order by ${order} ${sort} limit 10 offset ${offsetNone};`
+
+                db.query(paginationNone, (err, resultPaginationNone) => {
+                    if (err) {
+                        console.log(err)
+                        res.status(400).send(err)
+                    }
+
+                    res.status(200).send([...resultPaginationNone, maxPageNone])
+                })
+            })
+        } else if (!category) {
+            console.log(`filterByName`)
+            let filterByName = `select * from produk_satuan where nama like '%${name}%';`
+
+            db.query(filterByName, (err, resultFilterByName) => {
+                if (err) {
+                    console.log(err)
+                    res.status(400).send(err)
+                }
+
+                let jumlahSemuaProdukName = resultFilterByName.length
+                let maxPageName = Math.ceil(jumlahSemuaProdukName/10)
+                let offsetName = (page * 10) - 10
+
+                let paginationName = `select * from produk_satuan where nama like '%${name}%' order by ${order} ${sort} limit 10 offset ${offsetName};`
+
+                db.query(paginationName, (err, resultPaginationName) => {
+                    if (err) {
+                        console.log(err)
+                        res.status(400).send(err)
+                    }
+    
+                    res.status(200).send([...resultPaginationName, maxPageName])
+                })
+            })
+        } else {
+            console.log(`filterByCategory`)
+            let filterByCategory = `select * from produk_satuan where kategori = '${category}';`
+
+            db.query(filterByCategory, (err, resultFilterByCategory) => {
+                if (err) {
+                    console.log(err)
+                    res.status(400).send(err)
+                }
+
+                let jumlahSemuaProdukCategory = resultFilterByCategory.length
+                let maxPageCategory = Math.ceil(jumlahSemuaProdukCategory/10)
+                let offsetCategory = (page * 10) - 10
+
+                let paginationCategory = `select * from produk_satuan where kategori = '${category}' order by ${order} ${sort} limit 10 offset ${offsetCategory};`
+
+                db.query(paginationCategory, (err, resultPaginationCategory) => {
+                    if (err) {
+                        console.log(err)
+                        res.status(400).send(err)
+                    }
+    
+                    res.status(200).send([...resultPaginationCategory, maxPageCategory])
+                })
+            })
+        }
+    },
+    detailProduct: (req, res) => {
+        let detailQuery = `select * from produk_satuan where idproduk = ${req.params.idproduct};`
+
+        db.query(detailQuery, (err, resultDetailQuery) => {
+            if (err) {
+                console.log(err)
+                res.status(400).send(err)
+            }
+
+            res.status(200).send(resultDetailQuery[0])        
+        })
     }
 }

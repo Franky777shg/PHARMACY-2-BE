@@ -2,7 +2,6 @@ const express = require('express')
 const cors = require('cors')
 const PORT = 2000
 require('dotenv').config()
-
 const bearerToken = require('express-bearer-token')
 
 const app = express()
