@@ -94,16 +94,16 @@ module.exports = {
         })
     },
     changepw: (req, res) => {
-        console.log(req.user)
+        console.log(req.user,req.body,req.body.confPass,req.body.newPass)
         const {newPass, confPass} = req.body;
         const updatePw = `UPDATE user SET password = ${db.escape(confPass)} WHERE iduser = ${db.escape(req.user.iduser)};`
         if (newPass === confPass){
             db.query(updatePw, (err,result) => {
                 if (err) {
                     console.log(err)
-                    res.status(400).send(err)
+                    res.status(400).send('Reset Password Error')
                  }
-               res.status(200).send(result)
+               res.status(200).send('Your Password Has Been Changed')
             })
         }
     },
@@ -169,5 +169,8 @@ module.exports = {
             console.log(result)
             res.status(200).send(result)
         })
-    }
+    },
+    // getrole: (req,res) ={
+    //     const
+    // }
 }

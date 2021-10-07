@@ -1,8 +1,6 @@
 const router = require('express').Router()
-const {verifyToken} = require('../helpers/jwt')
 
 const { userController } = require('../controllers')
-// const { verifyToken } = require('../helpers/jwt')
 const {verifyToken} = require('../helpers/jwt')
 
 router.post('/login', userController.login)
