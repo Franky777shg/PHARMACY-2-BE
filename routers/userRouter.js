@@ -9,5 +9,7 @@ router.put('/changepw', userController.changepw)
 router.get('/regis', userController.getRegister)
 router.post('/addUser', userController.addUser)
 router.post('/verification', verifyToken, userController.verification)
+router.get('/userbyid/:id', userController.getUserById)
+router.patch('/edituser/:id', userController.updateUser)
 
 module.exports = router

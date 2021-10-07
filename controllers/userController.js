@@ -1,6 +1,6 @@
 const { db } = require('../database')
 const crypto = require('crypto')
-const {createToken} = require('../helpers/jwt')
+const { createToken } = require('../helpers/jwt')
 const transporter = require('../helpers/nodemailer')
 const EMAIL = process.env.EMAIL
 
@@ -28,38 +28,38 @@ module.exports = {
         const checkEmail = `select * from user where email = ${db.escape(email)};`
         console.log(checkEmail)
         db.query(checkEmail, (err, result) => {
-           if (err) {
+            if (err) {
                 console.log(err)
                 res.status(400).send(err)
-           }
-           else if (result.length === 0) {
+            }
+            else if (result.length === 0) {
                 res.status(400).send("User with this email does not exists.")
-           }
-           else if (result.length !== 0) {
+            }
+            else if (result.length !== 0) {
                 console.log(result)
                 // const getUser = `select username from user where email = ${db.escape(email)};`
                 // db.query(getUser, (err2, result2) => {
-                    // if (err2) {
-                    //     console.log(err2)
-                    //     res.status(400).send(err2)
-                    // }
-                    // console.log(result2)
-                    let token = createToken({ iduser: result[0].iduser })
-                    console.log(token)
-                    let info = transporter.sendMail({
-                        from: '"ADMIN" <csdvfsd@gmail.com>', //sender address
-                        to: `${email}`, //list of receivers
-                        subject: `Forget Password`, //Subject line
-                        text: `Hello ${result[0].username}`, //plain text body
-                        html: `<a href="http://localhost:3000/forgetpw/${token}">Please click here to reset your password</a>` //html body
-                    })
-                    .then( res2 => {
+                // if (err2) {
+                //     console.log(err2)
+                //     res.status(400).send(err2)
+                // }
+                // console.log(result2)
+                let token = createToken({ iduser: result[0].iduser })
+                console.log(token)
+                let info = transporter.sendMail({
+                    from: '"ADMIN" <csdvfsd@gmail.com>', //sender address
+                    to: `${email}`, //list of receivers
+                    subject: `Forget Password`, //Subject line
+                    text: `Hello ${result[0].username}`, //plain text body
+                    html: `<a href="http://localhost:3000/forgetpw/${token}">Please click here to reset your password</a>` //html body
+                })
+                    .then(res2 => {
                         console.log(res2)
                     })
-                    .catch( err3 => {
+                    .catch(err3 => {
                         console.log(err3)
                     })
-                    res.status(200).send('Email has been sent, kindly follow the instructions')
+                res.status(200).send('Email has been sent, kindly follow the instructions')
                 // })
             }
 
@@ -70,10 +70,10 @@ module.exports = {
 
         db.query(getQuery, (err, result) => {
             if (err) {
-               console.log(err)
-               res.status(400).send(err)
+                console.log(err)
+                res.status(400).send(err)
             }
-          res.status(200).send(result)
+            res.status(200).send(result)
         })
     },
     changepw: (req, res) => {
@@ -99,7 +99,7 @@ module.exports = {
 
                 // `insert into users set ?` otomatis tanpa sepanjang diatas
 
-                db.query(addQuery,req.body, (err, result) => {
+                db.query(addQuery, req.body, (err, result) => {
                     if (err) {
                         console.log(err)
                         res.status(400).send(err)
@@ -140,5 +140,37 @@ module.exports = {
             console.log(result)
             res.status(200).send(result)
         })
-    }
+    },
+    getUserById: (req, res) => {
+        let getQuery = `select * from user where iduser = ${req.params.id}`
+
+        db.query(getQuery, (err, result) => {
+            if (err) {
+                console.log(err)
+                res.status(400).send(err)
+            }
+            res.status(200).send(result)
+        })
+    },
+    //edit profile
+    updateUser: (req, res) => {
+        const updateUser = `update user set ? where iduser = ${req.params.id}`
+
+        db.query(updateUser, req.body, (err, result) => {
+            if (err) {
+                console.log(err)
+                res.status(400).send(err)
+            }
+            let getAllUsers = `select * from user where iduser = ${req.params.id}`
+
+            db.query(getAllUsers, (err2, result2) => {
+                if (err) {
+                    console.log(err2)
+                    res.status(400).send(err2)
+                }
+                res.status(200).send(result2)
+            })
+        })
+    },
+
 }
