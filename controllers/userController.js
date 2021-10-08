@@ -16,30 +16,30 @@ module.exports = {
                 console.log(err)
                 res.status(400).send(err)
             }
-            // console.log(result[0])
-            // let token = createToken({idusers: result[0].idusers})
-            // console.log(idusers,token)
-            // res.status(200).send({dataUser: result[0], token})
+            console.log(result[0])
+            let token = createToken({iduser: result[0].iduser})
+            // console.log(iduser,token)
+            res.status(200).send({dataUser: result[0], token})
+            // res.status(200).send(result)
+        })
+    },
+    keeplogin: (req,res) => {
+        console.log(req.user)
+        // const getUser = `select * from users u
+        // join profile p
+        // on u.idusers = p.idusers
+        // where u.idusers =  ${db.escape(req.user.idusers)}`
+        const getUser = `select * from user where iduser     = ${db.escape(req.user.iduser)}`
+        db.query(getUser, (err,result) => {
+            if(err) {
+                console.log(err)
+                res.status(400).send(err)
+            }
+            // res.status(200).send(result[0])
+            console.log(result)
             res.status(200).send(result)
         })
     },
-    // keeplogin: (req,res) => {
-    //     console.log(req.user)
-    //     // const getUser = `select * from users u
-    //     // join profile p
-    //     // on u.idusers = p.idusers
-    //     // where u.idusers =  ${db.escape(req.user.idusers)}`
-    //     const getUser = `select * from user where iduser     = ${db.escape(req.params.id)}`
-    //     db.query(getUser, (err,result) => {
-    //         if(err) {
-    //             console.log(err)
-    //             res.status(400).send(err)
-    //         }
-    //         // res.status(200).send(result[0])
-    //         console.log(result)
-    //         res.status(200).send(result)
-    //     })
-    // },
     forgotpw: (req, res) => {
         const { emailuser } = req.body;
         const checkEmail = `select * from user where email = ${db.escape(emailuser)};`
