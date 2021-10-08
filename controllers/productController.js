@@ -248,5 +248,51 @@ module.exports = {
 
             res.status(200).send(resultDetailQuery[0])        
         })
+    },
+    addProduct1: (req,res) => {
+        const { nama, harga, stok, satuan, link_foto, kategori, deskripsi, indikasi_umum, komposisi, dosis, aturan_pakai, kontra_indikasi, perhatian, efek_samping, segmentasi, kemasan, manufaktur, no_registrasi } = req.body
+        let { name, price, quantity } = req.body
+        // console.log(db.id)
+        // let newProductID = db[db.length - 1].id + 1
+        //manipulasi objek dengan bkin property id
+        // req.body.id = newProductID
+        // let addQuery = `insert ignore into products (name, price, quantity) values (${db.escape(name)},${price},${quantity});`
+        let addQuery = `insert ignore into products ?;`
+        db.query(addQuery, req.body, (err, result) => {
+            if (err) {
+                console.log(err)
+                res.status(400).send(err)
+            }
+            // res.status(200).send({ status: "Add Products Success", data: req.body })
+            const getAllProducts = `select * from products;`
+            db.query(getAllProducts, (err2, result2) => {
+                if (err) {
+                    console.log(err2)
+                    res.status(400).send(err2)
+                }
+                res.status(200).send({ status: "Add Products Success", data: req.body })
+            })
+        })
+
+        const id = +req.params.id
+        console.log('req.file', req.file)
+
+        if(!req.file) {
+            res.status(400).send('NO FILE')
+        }
+
+        const updatePict = `update profile set profile_pic = 'images/${req.file.filename}'
+                            where idusers = ${id}`
+        db.query(updatePict, (err, result) => {
+            if (err) {
+                console.log(err)
+                res.status(400).send(err)
+            }
+
+            res.status(200).send('berhasil upload foto')
+        })
+    }
+    ,addProductR: (req,res) => {
+        const { nama, harga, kategori, link_foto, stok_botol, stok_ml} = req.body
     }
 }
