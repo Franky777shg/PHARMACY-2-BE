@@ -249,50 +249,282 @@ module.exports = {
             res.status(200).send(resultDetailQuery[0])        
         })
     },
-    addProduct1: (req,res) => {
-        const { nama, harga, stok, satuan, link_foto, kategori, deskripsi, indikasi_umum, komposisi, dosis, aturan_pakai, kontra_indikasi, perhatian, efek_samping, segmentasi, kemasan, manufaktur, no_registrasi } = req.body
-        let { name, price, quantity } = req.body
-        // console.log(db.id)
-        // let newProductID = db[db.length - 1].id + 1
-        //manipulasi objek dengan bkin property id
-        // req.body.id = newProductID
-        // let addQuery = `insert ignore into products (name, price, quantity) values (${db.escape(name)},${price},${quantity});`
-        let addQuery = `insert ignore into products ?;`
-        db.query(addQuery, req.body, (err, result) => {
+    getProductResep: (req, res) => {
+        const { page } = req.body
+        let getProductSatuan = 'select * from produk_resep;'
+
+        db.query(getProductSatuan, (err, resultSemuaProduk) => {
             if (err) {
                 console.log(err)
                 res.status(400).send(err)
             }
-            // res.status(200).send({ status: "Add Products Success", data: req.body })
-            const getAllProducts = `select * from products;`
-            db.query(getAllProducts, (err2, result2) => {
+          
+            let jumlahSemuaProduk = resultSemuaProduk.length
+            let maxPage = Math.ceil(jumlahSemuaProduk/10)
+            let offset = (page * 10) - 10
+
+            let getQuery = `select * from produk_resep limit 10 offset ${offset};`
+
+            db.query(getQuery, (err, resultPagination) => {
                 if (err) {
-                    console.log(err2)
-                    res.status(400).send(err2)
+                    console.log(err)
+                    res.status(400).send(err)
                 }
-                res.status(200).send({ status: "Add Products Success", data: req.body })
+
+                res.status(200).send([...resultPagination, maxPage])
             })
         })
+    },
+    filterProductResep: (req, res) => {
+        const { name, category, page } = req.body
 
-        const id = +req.params.id
-        console.log('req.file', req.file)
+        if (name && category) {
+            console.log(`filterByBoth`)
+            let filterByBoth = `select * from produk_resep where nama like '%${name}%' and kategori = '${category}';`
 
-        if(!req.file) {
-            res.status(400).send('NO FILE')
+            db.query(filterByBoth, (err, resultFilterByBoth) => {
+                if (err) {
+                    console.log(err)
+                    res.status(400).send(err)
+                }
+
+                let jumlahSemuaProdukBoth = resultFilterByBoth.length
+                let maxPageBoth = Math.ceil(jumlahSemuaProdukBoth/10)
+                let offsetBoth = (page * 10) - 10
+
+                let paginationBoth = `select * from produk_resep where nama like '%${name}%' and kategori = '${category}' limit 10 offset ${offsetBoth};`
+
+                db.query(paginationBoth, (err, resultPaginationBoth) => {
+                    if (err) {
+                        console.log(err)
+                        res.status(400).send(err)
+                    }
+    
+                    res.status(200).send([...resultPaginationBoth, maxPageBoth])
+                })
+            })
+        } else if (!name && !category) {
+            console.log(`filterByNone`)
+            let filterByNone = `select * from produk_resep;`
+
+            db.query(filterByNone, (err, resultFilterByNone) => {
+                if (err) {
+                    console.log(err)
+                    res.status(400).send(err)
+                }
+
+                let jumlahSemuaProdukNone = resultFilterByNone.length
+                let maxPageNone = Math.ceil(jumlahSemuaProdukNone/10)
+                let offsetNone = (page * 10) - 10
+
+                let paginationNone = `select * from produk_resep limit 10 offset ${offsetNone};`
+
+                db.query(paginationNone, (err, resultPaginationNone) => {
+                    if (err) {
+                        console.log(err)
+                        res.status(400).send(err)
+                    }
+
+                    res.status(200).send([...resultPaginationNone, maxPageNone])
+                })
+            })
+        } else if (!category) {
+            console.log(`filterByName`)
+            let filterByName = `select * from produk_resep where nama like '%${name}%';`
+
+            db.query(filterByName, (err, resultFilterByName) => {
+                if (err) {
+                    console.log(err)
+                    res.status(400).send(err)
+                }
+
+                let jumlahSemuaProdukName = resultFilterByName.length
+                let maxPageName = Math.ceil(jumlahSemuaProdukName/10)
+                let offsetName = (page * 10) - 10
+
+                let paginationName = `select * from produk_resep where nama like '%${name}%' limit 10 offset ${offsetName};`
+
+                db.query(paginationName, (err, resultPaginationName) => {
+                    if (err) {
+                        console.log(err)
+                        res.status(400).send(err)
+                    }
+    
+                    res.status(200).send([...resultPaginationName, maxPageName])
+                })
+            })
+        } else {
+            console.log(`filterByCategory`)
+            let filterByCategory = `select * from produk_resep where kategori = '${category}';`
+
+            db.query(filterByCategory, (err, resultFilterByCategory) => {
+                if (err) {
+                    console.log(err)
+                    res.status(400).send(err)
+                }
+
+                let jumlahSemuaProdukCategory = resultFilterByCategory.length
+                let maxPageCategory = Math.ceil(jumlahSemuaProdukCategory/10)
+                let offsetCategory = (page * 10) - 10
+
+                let paginationCategory = `select * from produk_resep where kategori = '${category}' limit 10 offset ${offsetCategory};`
+
+                db.query(paginationCategory, (err, resultPaginationCategory) => {
+                    if (err) {
+                        console.log(err)
+                        res.status(400).send(err)
+                    }
+    
+                    res.status(200).send([...resultPaginationCategory, maxPageCategory])
+                })
+            })
         }
+    }, 
+    sortProductResep: (req, res) => {
+        const { name, category, page, order, sort } = req.body
 
-        const updatePict = `update profile set profile_pic = 'images/${req.file.filename}'
-                            where idusers = ${id}`
-        db.query(updatePict, (err, result) => {
-            if (err) {
-                console.log(err)
-                res.status(400).send(err)
-            }
+        if (name && category) {
+            console.log(`filterByBoth`)
+            let filterByBoth = `select * from produk_resep where nama like '%${name}%' and kategori = '${category}';`
 
-            res.status(200).send('berhasil upload foto')
-        })
-    }
-    ,addProductR: (req,res) => {
-        const { nama, harga, kategori, link_foto, stok_botol, stok_ml} = req.body
-    }
+            db.query(filterByBoth, (err, resultFilterByBoth) => {
+                if (err) {
+                    console.log(err)
+                    res.status(400).send(err)
+                }
+
+                let jumlahSemuaProdukBoth = resultFilterByBoth.length
+                let maxPageBoth = Math.ceil(jumlahSemuaProdukBoth/10)
+                let offsetBoth = (page * 10) - 10
+
+                let paginationBoth = `select * from produk_resep where nama like '%${name}%' and kategori = '${category}' order by ${order} ${sort} limit 10 offset ${offsetBoth};`
+
+                db.query(paginationBoth, (err, resultPaginationBoth) => {
+                    if (err) {
+                        console.log(err)
+                        res.status(400).send(err)
+                    }
+    
+                    res.status(200).send([...resultPaginationBoth, maxPageBoth])
+                })
+            })
+        } else if (!name && !category) {
+            console.log(`filterByNone`)
+            let filterByNone = `select * from produk_resep;`
+
+            db.query(filterByNone, (err, resultFilterByNone) => {
+                if (err) {
+                    console.log(err)
+                    res.status(400).send(err)
+                }
+
+                let jumlahSemuaProdukNone = resultFilterByNone.length
+                let maxPageNone = Math.ceil(jumlahSemuaProdukNone/10)
+                let offsetNone = (page * 10) - 10
+
+                let paginationNone = `select * from produk_resep order by ${order} ${sort} limit 10 offset ${offsetNone};`
+
+                db.query(paginationNone, (err, resultPaginationNone) => {
+                    if (err) {
+                        console.log(err)
+                        res.status(400).send(err)
+                    }
+
+                    res.status(200).send([...resultPaginationNone, maxPageNone])
+                })
+            })
+        } else if (!category) {
+            console.log(`filterByName`)
+            let filterByName = `select * from produk_resep where nama like '%${name}%';`
+
+            db.query(filterByName, (err, resultFilterByName) => {
+                if (err) {
+                    console.log(err)
+                    res.status(400).send(err)
+                }
+
+                let jumlahSemuaProdukName = resultFilterByName.length
+                let maxPageName = Math.ceil(jumlahSemuaProdukName/10)
+                let offsetName = (page * 10) - 10
+
+                let paginationName = `select * from produk_resep where nama like '%${name}%' order by ${order} ${sort} limit 10 offset ${offsetName};`
+
+                db.query(paginationName, (err, resultPaginationName) => {
+                    if (err) {
+                        console.log(err)
+                        res.status(400).send(err)
+                    }
+    
+                    res.status(200).send([...resultPaginationName, maxPageName])
+                })
+            })
+        } else {
+            console.log(`filterByCategory`)
+            let filterByCategory = `select * from produk_resep where kategori = '${category}';`
+
+            db.query(filterByCategory, (err, resultFilterByCategory) => {
+                if (err) {
+                    console.log(err)
+                    res.status(400).send(err)
+                }
+
+                let jumlahSemuaProdukCategory = resultFilterByCategory.length
+                let maxPageCategory = Math.ceil(jumlahSemuaProdukCategory/10)
+                let offsetCategory = (page * 10) - 10
+
+                let paginationCategory = `select * from produk_resep where kategori = '${category}' order by ${order} ${sort} limit 10 offset ${offsetCategory};`
+
+                db.query(paginationCategory, (err, resultPaginationCategory) => {
+                    if (err) {
+                        console.log(err)
+                        res.status(400).send(err)
+                    }
+    
+                    res.status(200).send([...resultPaginationCategory, maxPageCategory])
+                })
+            })
+        }
+    },
+//     addProduct1: (req,res) => {
+//         const { nama, harga, stok, satuan, link_foto, kategori, deskripsi, indikasi_umum, komposisi, dosis, aturan_pakai, kontra_indikasi, perhatian, efek_samping, segmentasi, kemasan, manufaktur, no_registrasi } = req.body
+//         let { name, price, quantity } = req.body
+//         // console.log(db.id)
+//         // let newProductID = db[db.length - 1].id + 1
+//         //manipulasi objek dengan bkin property id
+//         // req.body.id = newProductID
+//         // let addQuery = `insert ignore into products (name, price, quantity) values (${db.escape(name)},${price},${quantity});`
+//         let addQuery = `insert ignore into products ?;`
+//         db.query(addQuery, req.body, (err, result) => {
+// res.status(200).send({ status: "Add Products Success", data: req.body })
+//             const getAllProducts = `select * from products;`
+//             db.query(getAllProducts, (err2, result2) => {
+//                 if (err) {
+//                     console.log(err2)
+//                     res.status(400).send(err2)
+//                 }
+//                 res.status(200).send({ status: "Add Products Success", data: req.body })
+//             })
+//         })
+
+//         const id = +req.params.id
+//         console.log('req.file', req.file)
+
+//         if(!req.file) {
+//             res.status(400).send('NO FILE')
+//         }
+
+//         const updatePict = `update profile set profile_pic = 'images/${req.file.filename}'
+//                             where idusers = ${id}`
+//         db.query(updatePict, (err, result) => {
+//             if (err) {
+//                 console.log(err)
+//                 res.status(400).send(err)
+//             }
+
+//             res.status(200).send('berhasil upload foto')
+//         })
+//     }
+//     ,addProductR: (req,res) => {
+//         const { nama, harga, kategori, link_foto, stok_botol, stok_ml} = req.body
+//     },
 }
