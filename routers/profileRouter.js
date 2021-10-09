@@ -1,9 +1,11 @@
 const router = require('express').Router()
 
 const {profileController} = require('../controllers')
-const {upload} = require('../helpers/multer')
-const uploader = upload()
+const { verifyToken } = require('../helpers/jwt')
+const {uploadPhoto} = require('../helpers/multer')
+const uploader = uploadPhoto()
 
-router.post('/upload/:id', uploader, profileController.uploadPhoto)
+router.post('/upload', uploader, verifyToken, profileController.uploadPhoto)
+router.patch('/delete', verifyToken, profileController.deletePhoto)
 
 module.exports = router
