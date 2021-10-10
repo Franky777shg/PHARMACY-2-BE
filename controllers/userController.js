@@ -14,11 +14,12 @@ module.exports = {
         db.query(getUser, (err, result) => {
             if (err) {
                 console.log(err)
-                res.status(400).send(err)
+                res.status(400).send('err')
             }
 
             if (result.length === 0){
-                res.status(400).send("Username/Password is Invalid")
+                console.log('error')
+                res.status(400).send("Username/Password is Invalid!")
             }
             console.log(result[0])
             let token = createToken({iduser: result[0].iduser})
