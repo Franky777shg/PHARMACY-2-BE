@@ -499,7 +499,8 @@ module.exports = {
                 console.log(err)
                 res.status(400).send(err)
             }
-            res.status(200).send('berhasil upload foto')
+            res.status(200).send({foto: req.file.filename})
+            console.log(req.file.filename)
             // const { nama, harga, stok, satuan, kategori, deskripsi, indikasi_umum, komposisi, dosis, aturan_pakai, kontra_indikasi, perhatian, efek_samping, segmentasi, kemasan, manufaktur, no_registrasi } = req.body
             // let addProduct1an = `insert into produk_satuan (nama, harga, stok, satuan, kategori, deskripsi, indikasi_umum, komposisi, dosis, aturan_pakai, kontra_indikasi, perhatian, efek_samping, segmentasi, kemasan, manufaktur, no_registrasi)
             // values (${db.escape(nama)}, ${db.escape(harga)}, ${db.escape(stok)}, ${db.escape(satuan)}, ${db.escape(kategori)}, ${db.escape(deskripsi)}, ${db.escape(indikasi_umum)}, ${db.escape(komposisi)}, ${db.escape(dosis)}, ${db.escape(aturan_pakai)}, ${db.escape(kontra_indikasi)}, ${db.escape(perhatian)}, ${db.escape(efek_samping)}, ${db.escape(segmentasi)}, ${db.escape(kemasan)}, ${db.escape(manufaktur)}, ${db.escape(no_registrasi)})`
@@ -532,16 +533,29 @@ module.exports = {
         })
     },
     addProduct1data: (req,res) => {
-        const { nama, harga, stok, satuan, kategori, deskripsi, indikasi_umum, komposisi, dosis, aturan_pakai, kontra_indikasi, perhatian, efek_samping, segmentasi, kemasan, manufaktur, no_registrasi } = req.body
-            let addProduct1an = `insert into produk_satuan (nama, harga, stok, satuan, kategori, deskripsi, indikasi_umum, komposisi, dosis, aturan_pakai, kontra_indikasi, perhatian, efek_samping, segmentasi, kemasan, manufaktur, no_registrasi)
-              values (${db.escape(nama)}, ${db.escape(harga)}, ${db.escape(stok)}, ${db.escape(satuan)}, ${db.escape(kategori)}, ${db.escape(deskripsi)}, ${db.escape(indikasi_umum)}, ${db.escape(komposisi)}, ${db.escape(dosis)}, ${db.escape(aturan_pakai)}, ${db.escape(kontra_indikasi)}, ${db.escape(perhatian)}, ${db.escape(efek_samping)}, ${db.escape(segmentasi)}, ${db.escape(kemasan)}, ${db.escape(manufaktur)}, ${db.escape(no_registrasi)})`
+        console.log(req.body,req.body.hasil.foto)
+        const { nama, harga, stok, satuan, kategori, deskripsi, indikasi_umum, komposisi, dosis, aturan_pakai, kontra_indikasi, perhatian, efek_samping, segmentasi, kemasan, manufaktur, no_registrasi} = req.body
+            let addProduct1an = `update produk_satuan set nama=${db.escape(nama)}, harga=${db.escape(harga)}, stok=${db.escape(stok)}, satuan=${db.escape(satuan)}, kategori=${db.escape(kategori)}, 
+            deskripsi=${db.escape(deskripsi)}, indikasi_umum=${db.escape(indikasi_umum)}, komposisi=${db.escape(komposisi)}, dosis=${db.escape(dosis)}, aturan_pakai=${db.escape(aturan_pakai)}, kontra_indikasi=${db.escape(kontra_indikasi)},
+            perhatian=${db.escape(perhatian)}, efek_samping=${db.escape(efek_samping)}, segmentasi=${db.escape(segmentasi)}, kemasan=${db.escape(kemasan)}, manufaktur=${db.escape(manufaktur)}, no_registrasi=${db.escape(no_registrasi)}
+            where link_foto = 'images/produk_satuan/${req.body.hasil.foto}'`
+            let getidproduk = `select idproduk from produk_satuan where link_foto = 'images/produk_satuan/${req.body.hasil.foto}'`
               db.query(addProduct1an, req.body, (err1, result1) => {
                     if (err1) {
-                        console.log(err1.response.data)
+                        // console.log(err1.response.data)
+                        // console.log(req.file.filename)
                         res.status(400).send(err1.response.data)
                     }
                     console.log(result1)
-                    res.status(200).send("berhasil add product")
+                    // res.status(200).send({data:result1})
+                    db.query(getidproduk,req.body,(err2,result2) => {
+                        if (err2) {
+                            // console.log(err1.response.data)
+                            // console.log(req.file.filename)
+                            res.status(400).send(err2.response.data)
+                        }
+                        res.status(200).send({data:result2})
+                    })
                 })
 
     },
