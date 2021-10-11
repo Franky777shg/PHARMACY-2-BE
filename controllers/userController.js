@@ -16,6 +16,10 @@ module.exports = {
                 console.log(err)
                 res.status(400).send(err)
             }
+
+            if (result.length === 0){
+                res.status(400).send("Username/Password is Invalid")
+            }
             console.log(result[0])
             let token = createToken({iduser: result[0].iduser})
             // console.log(iduser,token)
@@ -145,7 +149,7 @@ module.exports = {
                     let info = transporter.sendMail({
                         from: `"ADMIN" <${EMAIL}>`, // sender address
                         to: `${req.body.email}`, // list of receivers
-                        subject: `Email Verivication for ${req.body.username} ✔`, // Subject line
+                        subject: `Email Verification for ${req.body.username} ✔`, // Subject line
                         text: `Hello ${req.body.username}`, // plain text body
                         html: `<a href="http://localhost:3000/verification/${token}" > Click here to verify Your Account</a>`, // html body
                     });
