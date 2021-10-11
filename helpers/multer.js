@@ -3,9 +3,9 @@ const multer = require('multer')
 const path = require('path') //cari alamat
 
 module.exports = {
-    upload : () => {
+    uploadPhoto : () => {
         let storage = multer.diskStorage({
-            destination: path.join(path.resolve('public'), 'images'), //tempat penyimpanan
+            destination: path.join(path.resolve('public'), 'images', 'photoProfile'), //tempat penyimpanan
             // localhost:2000/image
             
             filename : (req, file, cb) => {

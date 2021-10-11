@@ -175,7 +175,8 @@ module.exports = {
         })
     },
     getUserById: (req, res) => {
-        let getQuery = `select * from user where iduser = ${req.params.id}`
+        let iduser = req.user.iduser
+        let getQuery = `select * from user where iduser = ${iduser}`
 
         db.query(getQuery, (err, result) => {
             if (err) {
