@@ -551,7 +551,6 @@ module.exports = {
                     db.query(getidproduk,req.body,(err2,result2) => {
                         if (err2) {
                             // console.log(err1.response.data)
-                            // console.log(req.file.filename)
                             res.status(400).send(err2.response.data)
                         }
                         res.status(200).send({data:result2})
