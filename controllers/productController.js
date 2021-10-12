@@ -539,6 +539,7 @@ module.exports = {
             deskripsi=${db.escape(deskripsi)}, indikasi_umum=${db.escape(indikasi_umum)}, komposisi=${db.escape(komposisi)}, dosis=${db.escape(dosis)}, aturan_pakai=${db.escape(aturan_pakai)}, kontra_indikasi=${db.escape(kontra_indikasi)},
             perhatian=${db.escape(perhatian)}, efek_samping=${db.escape(efek_samping)}, segmentasi=${db.escape(segmentasi)}, kemasan=${db.escape(kemasan)}, manufaktur=${db.escape(manufaktur)}, no_registrasi=${db.escape(no_registrasi)}
             where link_foto = 'images/produk_satuan/${req.body.hasil.foto}'`
+
         let getidproduk = `select idproduk from produk_satuan where link_foto = 'images/produk_satuan/${req.body.hasil.foto}'`
         db.query(addProduct1an, req.body, (err1, result1) => {
             if (err1) {
