@@ -721,5 +721,17 @@ module.exports = {
             // res.status(200).send({ data: result2 })
             res.status(200).send('Berhasil update produk resep')
         })
+    },
+    detailProductresep: (req, res) => {
+        let detailQuery = `select * from produk_resep where idproduk_resep = ${req.params.idproduct};`
+
+        db.query(detailQuery, (err, resultDetailQuery) => {
+            if (err) {
+                console.log(err)
+                res.status(400).send(err)
+            }
+
+            res.status(200).send(resultDetailQuery[0])
+        })
     }
 }
