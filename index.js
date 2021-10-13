@@ -29,6 +29,7 @@ app.get('/', (req, res) => {
 })
 
 const { productRouter, userRouter, profileRouter, transactionRouter } = require('./routers')
+
 app.use('/product', productRouter)
 app.use('/user', userRouter)
 app.use('/profile', profileRouter)

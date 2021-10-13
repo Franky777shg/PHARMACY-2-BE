@@ -1,6 +1,20 @@
 const { db } = require('../database')
 
+const { createToken } = require('../helpers/jwt')
+
 module.exports = {
+  pushCart: (req, res) => {
+        // const {delProduct} = req.body
+        let delP1 = `inesrt into from produk_satuan where idproduk = ${req.params.idproduct}`
+        db.query(delP1, (err, result) => {
+            if (err) {
+                console.log(err)
+                res.status(400).send(err)
+            }
+          res.status(200).send("Produk berhasil di push")
+            console.log(result)
+        })
+    },
     getTransaksiObtResepOnGoing: (req, res) => {
         const getQuery = 'SELECT * FROM order_resep where status = "Waiting For Approval" or status = "Waiting For Payment" or status = "Waiting For Payment Approval" or status = "Processing" or status = "Sending Package";'
     
@@ -73,7 +87,7 @@ module.exports = {
             res.status(200).send(resultById[0])
         })
     },
-    addToOrderDetailResep: (req, res) => {
+  addToOrderDetailResep: (req, res) => {
         let addQuery = `insert into order_detail_resep set ?`
 
         db.query(addQuery, req.body, (err, resultAddODetailResep) => {
@@ -84,7 +98,7 @@ module.exports = {
             res.status(200).send(resultAddODetailResep)
         })
     },
-    updateStokResep: (req, res) => {
+  updateStokResep: (req, res) => {
         const { id, stok } = req.body
 
         let updateStokResep = `update produk_resep set stok_ml = ${stok} where idproduk_resep = ${id};`
@@ -101,11 +115,11 @@ module.exports = {
 
         let updateStatusResep = `update order_resep set status = "${statusBaru}" where order_number = ${order_number};`
         db.query(updateStatusResep, (err, resultUpdateStatusResep) => {
-            if (err) {
+          if (err) {
                 console.log(err)
                 res.status(400).send(err)
             }
-            res.status(200).send(resultUpdateStatusResep)
+          res.status(200).send(resultUpdateStatusResep)
         })
     },
     rejectTransactionResep: (req, res) => {
