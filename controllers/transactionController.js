@@ -87,7 +87,7 @@ module.exports = {
             res.status(200).send(resultById[0])
         })
     },
-  addToOrderDetailResep: (req, res) => {
+    addToOrderDetailResep: (req, res) => {
         let addQuery = `insert into order_detail_resep set ?`
 
         db.query(addQuery, req.body, (err, resultAddODetailResep) => {
@@ -98,7 +98,7 @@ module.exports = {
             res.status(200).send(resultAddODetailResep)
         })
     },
-  updateStokResep: (req, res) => {
+    updateStokResep: (req, res) => {
         const { id, stok } = req.body
 
         let updateStokResep = `update produk_resep set stok_ml = ${stok} where idproduk_resep = ${id};`
@@ -115,11 +115,11 @@ module.exports = {
 
         let updateStatusResep = `update order_resep set status = "${statusBaru}" where order_number = ${order_number};`
         db.query(updateStatusResep, (err, resultUpdateStatusResep) => {
-          if (err) {
+            if (err) {
                 console.log(err)
                 res.status(400).send(err)
             }
-          res.status(200).send(resultUpdateStatusResep)
+            res.status(200).send(resultUpdateStatusResep)
         })
     },
     rejectTransactionResep: (req, res) => {
@@ -134,5 +134,31 @@ module.exports = {
             }
             res.status(200).send(resultRejectResep)
         })
-    }
+    },
+    getDetailOrderResep: (req, res) => {
+        const { order_number } = req.body
+
+        const getDetail = `select * from order_detail_resep where order_number = ${order_number};`
+
+        db.query(getDetail, (err, resultDetailOrder) => {
+            if (err) {
+                console.log(err)
+                res.status(400).send(err)
+            }
+            res.status(200).send(resultDetailOrder)
+        })
+    },
+    getImageBuktiPembayaranResep: (req, res) => {
+        const { order_number } = req.body
+
+        const query = `select payment_proof_resep from payment_resep where order_number = ${order_number};`
+
+        db.query(query, (err, resultImageBuktiPembayaranResep) => {
+            if (err) {
+                console.log(err)
+                res.status(400).send(err)
+            }
+            res.status(200).send(resultImageBuktiPembayaranResep[0].payment_proof_resep)
+        })
+    },
 }
