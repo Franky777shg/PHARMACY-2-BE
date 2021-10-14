@@ -18,5 +18,7 @@ router.post('/addOrderDetailResep', transactionController.addToOrderDetailResep)
 router.post('/updateStokResep', transactionController.updateStokResep)
 router.post('/updateStatusResep', transactionController.updateStatusResep)
 router.post('/rejectTransactionResep', transactionController.rejectTransactionResep)
+router.post('/getDetailOrderResep', transactionController.getDetailOrderResep)
+router.post('/getImageBuktiPembayaranResep', transactionController.getImageBuktiPembayaranResep)
 
 module.exports = router
