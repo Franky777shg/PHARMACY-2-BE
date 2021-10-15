@@ -577,9 +577,8 @@ module.exports = {
             res.status(200).send({ foto: req.file.filename })
             console.log(req.file.filename)
         })
-    }
-
-    , addProductRdata: (req, res) => {
+    }, 
+    addProductRdata: (req, res) => {
         const { nama, harga, kategori, stokbotol, stokml } = req.body
         let addProductR = `update produk_resep set nama=${db.escape(nama)}, harga=${db.escape(harga)}, kategori=${db.escape(kategori)}, 
             stok_botol=${db.escape(stokbotol)}, stok_ml=${db.escape(stokml)}
@@ -732,6 +731,26 @@ module.exports = {
             }
 
             res.status(200).send(resultDetailQuery[0])
+        })
+    },
+    getDataUsageRawMaterial: (req, res) => {
+        let id = req.params.idproduct
+
+        let getQueryUsage = `select t1.date, t1.time, t1.order_number, t2.idproduk, t2.nama_produk, t2.qty_beli
+                        from 
+                            order_resep t1
+                        inner join 
+                            order_detail_resep t2 
+                            on t1.order_number = t2.order_number
+                            where t2.idproduk = ${id} and t1.status = "Complete";`
+
+        db.query(getQueryUsage, (err, resultQueryUsage) => {
+            if (err) {
+                console.log(err)
+                res.status(400).send(err)
+            }
+
+            res.status(200).send(resultQueryUsage)
         })
     }
 }
