@@ -23,5 +23,6 @@ router.post('/edit-productr/:id', uploader1, productController.editProductRfoto)
 router.post('/get-productresep', productController.getProductResep)
 router.post('/filter-productresep', productController.filterProductResep)
 router.post('/sort-productresep', productController.sortProductResep)
+router.get('/rawMaterialUsage/:idproduct', productController.getDataUsageRawMaterial)
 
 module.exports = router
