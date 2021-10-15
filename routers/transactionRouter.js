@@ -6,7 +6,8 @@ const { uploadp1,uploadpr } = require('../helpers/multer')
 const uploader = uploadp1()
 const uploader1 = uploadpr()
 
-router.post('/push-cart/:iduser', transactionController.pushCart)
-// router.get('/userbyid',verifyToken, userController.getUserById)
+router.patch('/add-cart/:iduser', transactionController.addCart)
+router.patch('/addnew-cart/:iduser', transactionController.addNewCart)
+router.get('/get-cart/:iduser', transactionController.getCartUser)
 
 module.exports = router
