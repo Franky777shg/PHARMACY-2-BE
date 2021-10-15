@@ -34,9 +34,9 @@ module.exports = {
             res.status(200).send(resultdel)
         })
     },
-    getResepById: (req, res) => {
-        let id = req.params.id
-        let getQuery = `select * from order_resep where idresep = ${id}`
+    
+    getResepById: (req, res) => { //fokus sini
+        let getQuery = `select * from order_resep where order_number = ${db.escape(req.body.order_number)}`
 
         db.query(getQuery, (err, result) => {
             if (err) {
@@ -67,22 +67,17 @@ module.exports = {
             res.status(400).send('NO FILE')
         }
         // const updatePicture = `update order_resep set image_resep = 'images/photoResep/${req.file.filename}' where idresep = ${id} order by idusers = ${db.escape(req.body.idusers)} and order_number = ${db.escape(req.body.order_number)};`
-        const updatePicture = `update order_resep set image_resep = 'images/photoResep/${req.file.filename}' where idresep = ${id} order by date = ${db.escape(req.body.date)};`
+        const updatePicture = `update order_resep set image_resep = 'images/photoResep/${req.file.filename}' where idresep = ${id} ;`
 
         db.query(updatePicture, (err, result) => {
             if (err) {
                 console.log(err)
                 res.status(400).send(err)
             }
-
-            // let token = createToken({
-            //     idresep: result.insertId
-            // })
-            // console.log(token)
-
             res.status(200).send(result)
         })
     },
+
     updateResep: (req, res) => {
         const idresep = req.params.id
         const updateResep = `update order_resep set ? where idresep = ${idresep}`
@@ -103,7 +98,7 @@ module.exports = {
             })
         })
     },
-    addDataResep: (req, res) => {
+    addDataResep: (req, res) => { //ok
         let getQuery = `insert into order_resep set ?;`
 
         db.query(getQuery, req.body, (err, result) => {
@@ -111,7 +106,8 @@ module.exports = {
                 console.log(err)
                 res.status(400).send(err)
             }
-            res.status(200).send(result)
+            
+                res.status(200).send(req.body)
         })
     },
 
