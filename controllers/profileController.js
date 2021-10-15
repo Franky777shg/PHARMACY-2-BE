@@ -46,8 +46,23 @@ module.exports = {
             res.status(200).send(result)
         })
     },
-    getResep: (req, res) => {
-        let getQuery = `select * from order_resep;`
+
+    addDataResep: (req, res) => { //ok
+        let getQuery = `insert into order_resep set ?;`
+
+        db.query(getQuery, req.body, (err, result) => {
+            if (err) {
+                console.log(err)
+                res.status(400).send(err)
+            }
+            
+                res.status(200).send(req.body)
+        })
+    },
+
+    getById: (req, res) => {
+        const id = req.params.id
+        let getQuery = `select * from order_resep where idresep = ${id}`
 
         db.query(getQuery, (err, result) => {
             if (err) {
@@ -57,10 +72,11 @@ module.exports = {
             res.status(200).send(result)
         })
     },
-    uploadResep: (req, res) => {
+
+   
+    uploadResepPic: (req, res) => {
         const id = req.params.id
-        // const {idusers} = req.body
-        // console.log(idusers)
+        
         console.log('req.file', req.file)
 
         if (!req.file) {
@@ -74,40 +90,7 @@ module.exports = {
                 console.log(err)
                 res.status(400).send(err)
             }
-            res.status(200).send(result)
-        })
-    },
-
-    updateResep: (req, res) => {
-        const idresep = req.params.id
-        const updateResep = `update order_resep set ? where idresep = ${idresep}`
-
-        db.query(updateResep, req.body, (err, result) => {
-            if (err) {
-                console.log(err)
-                res.status(400).send(err)
-            }
-            let getAllUsers = `select * from order_resep where idresep = ${idresep}`
-
-            db.query(getAllUsers, (err2, result2) => {
-                if (err) {
-                    console.log(err2)
-                    res.status(400).send(err2)
-                }
-                res.status(200).send(result2)
-            })
-        })
-    },
-    addDataResep: (req, res) => { //ok
-        let getQuery = `insert into order_resep set ?;`
-
-        db.query(getQuery, req.body, (err, result) => {
-            if (err) {
-                console.log(err)
-                res.status(400).send(err)
-            }
-            
-                res.status(200).send(req.body)
+            res.status(200).send(`images/photoResep/${req.file.filename}`)
         })
     },
 

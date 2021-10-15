@@ -10,11 +10,9 @@ const resep = uploadImageResep()
 router.post('/upload', uploader, verifyToken, profileController.uploadPhoto)
 router.patch('/delete', verifyToken, profileController.deletePhoto)
 
-router.get('/dataresep', profileController.getResep)
-router.get('/resepbyid', profileController.getResepById)
-router.post('/resep/:id', resep, profileController.uploadResep)
-
-router.patch('/updateresep/:id', profileController.updateResep)
+router.post('/resepbyid', profileController.getResepById)
 router.post('/newdata', profileController.addDataResep)
+router.get('/byid/:id', profileController.getById)
+router.post('/resep/:id', resep, profileController.uploadResepPic)
 
 module.exports = router
