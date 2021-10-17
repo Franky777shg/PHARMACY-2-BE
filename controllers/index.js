@@ -3,6 +3,7 @@ const userController = require('./userController');
 const profileController = require('./profileController')
 const paymentController = require('./paymentController')
 const transactionController = require('./transactionController')
+const adminController = require('./adminController')
 
 
 module.exports = {
@@ -10,5 +11,6 @@ module.exports = {
     userController,
     profileController,
     paymentController,
-    transactionController
+    transactionController,
+    adminController
 }
