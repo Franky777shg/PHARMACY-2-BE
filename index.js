@@ -28,11 +28,12 @@ app.get('/', (req, res) => {
     res.status(200).send('<h1>Welcome to the Pharmacy!</h1>')
 })
 
-const { productRouter, userRouter, profileRouter, transactionRouter } = require('./routers')
+const { productRouter, userRouter, profileRouter, transactionRouter, userhistoryRouter } = require('./routers')
 
 app.use('/product', productRouter)
 app.use('/user', userRouter)
 app.use('/profile', profileRouter)
 app.use('/transaction', transactionRouter)
+app.use('/history', userhistoryRouter)
 
 app.listen(PORT, () => console.log(`Server is running at PORT: ${PORT}`))

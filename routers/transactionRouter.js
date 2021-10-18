@@ -24,9 +24,10 @@ router.post('/rejectTransactionResep', transactionController.rejectTransactionRe
 router.post('/getDetailOrderResep', transactionController.getDetailOrderResep)
 router.post('/getImageBuktiPembayaranResep', transactionController.getImageBuktiPembayaranResep)
 router.patch('/addqty-cart/:iduser', transactionController.addqtyCart)
-router.post('/post-history/:iduser', transactionController.posthistory)
-// router.get('/get-history/:iduser', transactionController.gethistory)
 router.post('/getDetailOrderSatuan', transactionController.getDetailOrderSatuan)
-router.get('/get-cartqty/:iduser', transactionController.getCartQty)
+router.patch('/get-cartqty/:iduser', transactionController.getCartQty)
+router.patch('/saveqty-cart/:iduser', transactionController.saveqtyCart)
+router.get('/total-cart/:iduser', transactionController.gettotalCartUser)
+router.get('/update-produkqty/:iduser', transactionController.updateqtyProduk)
 
 module.exports = router
