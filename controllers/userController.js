@@ -2,6 +2,7 @@ const { db } = require('../database')
 const crypto = require('crypto')
 const { createToken } = require('../helpers/jwt')
 const transporter = require('../helpers/nodemailer')
+const { EILSEQ } = require('constants')
 const EMAIL = process.env.EMAIL
 
 module.exports = {
@@ -22,11 +23,14 @@ module.exports = {
                 console.log('error')
                 res.status(400).send("Username/Password is Invalid!")
             }
-            console.log(result[0])
-            let token = createToken({iduser: result[0].iduser})
-            // console.log(iduser,token)
-            res.status(200).send({dataUser: result[0], token})
-            // res.status(200).send(result)
+            else {
+                console.log(result[0])
+                let token = createToken({iduser: result[0].iduser})
+                // console.log(iduser,token)
+                res.status(200).send({dataUser: result[0], token})
+                // res.status(200).send(result)
+            }
+                
         })
     },
     keeplogin: (req,res) => {
@@ -35,7 +39,7 @@ module.exports = {
         // join profile p
         // on u.idusers = p.idusers
         // where u.idusers =  ${db.escape(req.user.idusers)}`
-        const getUser = `select * from user where iduser     = ${db.escape(req.user.iduser)}`
+        const getUser = `select * from user where iduser = ${db.escape(req.user.iduser)}`
         db.query(getUser, (err,result) => {
             if(err) {
                 console.log(err)
