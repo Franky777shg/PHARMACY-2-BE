@@ -8,9 +8,10 @@ const EMAIL = process.env.EMAIL
 module.exports = {
     login: (req, res) => {
 
-        const { username, password } = req.body
+        const { username, email, password } = req.body
 
         const getUser = `select * from user where (username = ${db.escape(username)} or email = ${db.escape(username)}) and password = ${db.escape(password)};`
+        
         console.log(getUser)
         db.query(getUser, (err, result) => {
             if (err) {
