@@ -73,4 +73,16 @@ module.exports = {
         return multer({ storage }).single('IMG')
 
     },
+    uploadPaymentSatuan: () => {
+        let storage = multer.diskStorage({
+            destination: path.join(path.resolve('public'), 'images', 'paymentSatuan'),
+
+            filename: (req, file, cb) => {
+                cb(null, file.fieldname + "-" + Date.now() + path.extname(file.originalname))
+
+            }
+        })
+        return multer({ storage }).single('IMG')
+
+    }
 }

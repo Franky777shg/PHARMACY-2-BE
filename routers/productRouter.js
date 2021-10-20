@@ -24,5 +24,6 @@ router.post('/get-productresep', productController.getProductResep)
 router.post('/filter-productresep', productController.filterProductResep)
 router.post('/sort-productresep', productController.sortProductResep)
 router.get('/rawMaterialUsage/:idproduct', productController.getDataUsageRawMaterial)
+router.patch('/updateqty/:idproduk', productController.updateProductQtotal)
 
 module.exports = router
