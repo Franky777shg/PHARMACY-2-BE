@@ -577,7 +577,7 @@ module.exports = {
             res.status(200).send({ foto: req.file.filename })
             console.log(req.file.filename)
         })
-    }, 
+    },
     addProductRdata: (req, res) => {
         const { nama, harga, kategori, stokbotol, stokml } = req.body
         let addProductR = `update produk_resep set nama=${db.escape(nama)}, harga=${db.escape(harga)}, kategori=${db.escape(kategori)}, 
@@ -752,5 +752,18 @@ module.exports = {
 
             res.status(200).send(resultQueryUsage)
         })
-    }
+    },
+    updateProductQtotal: (req, res) => {
+        const { newstok, idproduk } = req.body
+        let editQty1an = `update produk_satuan set stok=${db.escape(newstok)} where idproduk = ${db.escape(idproduk)}`
+        // let getidproduk = `select idproduk from produk_satuan where link_foto = 'images/produk_satuan/${req.body.hasil.foto}'`
+        db.query(editQty1an, req.body, (err1, result1) => {
+            if (err1) {
+                // console.log(err1.response.data)
+                // console.log(req.file.filename)
+                res.status(400).send(err1)
+            }
+            console.log(result1)
+            res.status(200).send(result1)
+        })}
 }

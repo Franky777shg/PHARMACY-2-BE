@@ -7,7 +7,7 @@ module.exports = {
         console.log(req.body)
         console.log(req.params.iduser)
         // const {iduser} = req.body
-        let getCart = `select a.order_number,b.idproduk,b.nama,b.product_image,b.qty_beli,b.harga,b.total_harga,a.status
+        let getCart = `select a.order_number,b.idproduk,b.nama,b.product_image,b.qty_beli,b.harga,b.total_harga,a.status,a.date
         from order_satuan a
         inner join order_detail_satuan b
         on a.order_number=b.order_number
@@ -75,7 +75,7 @@ module.exports = {
         console.log(order_number)
         let addCart = `insert into order_detail_satuan (order_number, idproduk, nama, product_image, qty_beli, harga, total_harga) values (${db.escape(order_number)}, ${db.escape(idproduk)}, ${db.escape(nama)}, ${db.escape(link_foto)}, ${db.escape(qty)}, ${db.escape(harga)}, ${db.escape(total_harga)})`
         // let updateOrder = `update order_detail set order_number=${order.number}, iduser=${iduser}, status='cart`
-        let addOrdersatuan = `insert into order_satuan (order_number, iduser, status, date) values (${db.escape(order_number)}, ${req.params.iduser}, 'cart', ${date});`
+        let addOrdersatuan = `insert into order_satuan (order_number, iduser, status, date) values (${db.escape(order_number)}, ${req.params.iduser}, 'cart', ${db.escape(date)});`
         db.query(addCart, (err, result) => {
             if (err) {
                 console.log(err)
