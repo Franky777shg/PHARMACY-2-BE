@@ -105,7 +105,8 @@ module.exports = {
         })
     },
     getTransaksiObtResepOnGoing: (req, res) => {
-        const getQuery = 'SELECT * FROM order_resep where status = "Waiting For Approval" or status = "Waiting For Payment" or status = "Waiting For Payment Approval" or status = "Processing" or status = "Sending Package";'
+        // const getQuery = 'SELECT * FROM order_resep where status = "Waiting For Approval" or status = "Waiting For Payment" or status = "Waiting For Payment Approval" or status = "Processing" or status = "Sending Package";'
+        const getQuery = 'select * from user u join order_resep r on u.iduser = r.iduser where status = "Waiting For Approval" or status = "Waiting For Payment" or status = "Waiting For Payment Approval" or status = "Processing" or status = "Sending Package";'
 
         db.query(getQuery, (err, result) => {
             if (err) {
@@ -117,7 +118,9 @@ module.exports = {
         })
     },
     getTransaksiObtResepComplete: (req, res) => {
-        const getQuery = 'SELECT * FROM order_resep where status = "Complete";'
+        // const getQuery = 'SELECT * FROM order_resep where status = "Complete";'
+        const getQuery = 'select * from user u join order_resep r on u.iduser = r.iduser where status = "Complete";'
+
         db.query(getQuery, (err, result) => {
             if (err) {
                 console.log(err)

@@ -37,7 +37,6 @@ module.exports = {
     },
     getTransaksiSatuan: (req, res) => {
         const { page } = req.body
-        // let getOrderSatuan = 'select * from order_satuan;'
         let getOrderSatuan = `select * from user u
         join order_satuan s
         on u.iduser = s.iduser;`
@@ -68,7 +67,6 @@ module.exports = {
     },
     filterTransByResep: (req, res) => {
         const { name, page} = req.body
-        // console.log(`filterByName`)
         let filterByName = `select * from user u
             join order_resep r
             on u.iduser = r.iduser
@@ -102,7 +100,6 @@ module.exports = {
     },
     filterTransBySatuan: (req, res) => {
         const { name, page } = req.body
-        // console.log(`filterByName`)
         let filterBysatuan = `select * from user u
             join order_satuan s
             on u.iduser = s.iduser
@@ -132,7 +129,188 @@ module.exports = {
                 res.status(200).send([...resultPaginationSatuan, maxPageSatuan])
             })
         })
+    },
+    revenueResep : (req, res) => {
+        const { page } = req.body
+        let revenResep = `select * from payment_resep p
+        join order_resep r
+        on p.order_number = r.order_number;` 
 
+        db.query(revenResep, (err, resultRevenResep) => {
+            if (err) {
+                console.log(err)
+                res.status(400).send(err)
+            }
+            let jumlahRevResep = resultRevenResep.length
+            let maxPage = Math.ceil(jumlahRevResep / 10)
+            let offsetPage = (page * 10) - 10
+
+            let paginationSatuan = `select * from payment_resep p
+            join order_resep r
+            on p.order_number = r.order_number limit 10 offset ${offsetPage};`
+
+            db.query(paginationSatuan, (err, resultRevenResep) => {
+                if (err) {
+                    console.log(err)
+                    res.status(400).send(err)
+                }
+
+                res.status(200).send([...resultRevenResep, maxPage])
+            })
+        })    
+    },
+    totalRevenueResep : (req, res) => {
+        // const {SUM(total_belanja)} = req.body
+        let totalResep = `select SUM(total_belanja) as Total_Belanja from payment_resep;` 
+
+        db.query(totalResep, (err, resultTotalRevenResep) => {
+            if (err) {
+                console.log(err)
+                res.status(400).send(err)
+            }
+        res.status(200).send(resultTotalRevenResep[0])
+        })
+    },
+    revenueSatuan : (req, res) => {
+        const { page } = req.body
+        let revenResep = `select * from payment_satuan p
+        join order_satuan s
+        on p.order_number = s.order_number;` 
+
+        db.query(revenResep, (err, resultRevenResep) => {
+            if (err) {
+                console.log(err)
+                res.status(400).send(err)
+            }
+            let jumlahRevResep = resultRevenResep.length
+            let maxPage = Math.ceil(jumlahRevResep / 10)
+            let offsetPage = (page * 10) - 10
+
+            let paginationSatuan = `select * from payment_satuan p
+            join order_satuan s
+            on p.order_number = s.order_number limit 10 offset ${offsetPage};`
+
+            db.query(paginationSatuan, (err, resultRevensatuan) => {
+                if (err) {
+                    console.log(err)
+                    res.status(400).send(err)
+                }
+
+                res.status(200).send([...resultRevensatuan, maxPage])
+            })
+        })    
+    },
+    totalRevenueSatuan : (req, res) => {
+        // const {SUM(total_belanja)} = req.body
+        let totalResep = `select SUM(total_belanja) as Total_Belanja from payment_satuan;` 
+
+        db.query(totalResep, (err, resultTotalRevenSatuan) => {
+            if (err) {
+                console.log(err)
+                res.status(400).send(err)
+            }
+        res.status(200).send(resultTotalRevenSatuan[0])
+        })
     },
 
+    //perbulan RESEP
+    revenueResJuly : (req, res) => {
+        const { page, name } = req.body
+        let revenResep = `select * from payment_resep p
+        join order_resep r
+        on p.order_number = r.order_number
+        where date like '%/${name}/%'; ` 
+
+        db.query(revenResep, (err, resultRevenResep) => {
+            if (err) {
+                console.log(err)
+                res.status(400).send(err)
+            }
+            let jumlahRevResep = resultRevenResep.length
+            let maxPage = Math.ceil(jumlahRevResep / 10)
+            let offsetPage = (page * 10) - 10
+
+            let paginationSatuan = `select * from payment_resep p
+            join order_resep r
+            on p.order_number = r.order_number
+            where date like '%/${name}/%' limit 10 offset ${offsetPage};`
+
+            db.query(paginationSatuan, (err, resultRevensatuan) => {
+                if (err) {
+                    console.log(err)
+                    res.status(400).send(err)
+                }
+
+                res.status(200).send([...resultRevensatuan, maxPage])
+            })
+        })    
+    },
+    totalRevResJuly : (req, res) => {
+        const { name } = req.body
+        let totalResep = `select SUM(total_belanja) as Total_Belanja from payment_resep p
+        join order_resep r
+        on p.order_number = r.order_number
+        where date like '%/${name}/%';` 
+
+        db.query(totalResep, (err, resultTotalRevenSatuan) => {
+            if (err) {
+                console.log(err)
+                res.status(400).send(err)
+            }
+        res.status(200).send(resultTotalRevenSatuan[0])
+        })
+    },
+    
+
+    //perbulan_SATUAN
+    revenueSatJuly : (req, res) => {
+        const { page, name } = req.body
+        let revenResep = `select * from payment_satuan p
+        join order_satuan r
+        on p.order_number = r.order_number
+        where date like '%/${name}/%'; ` 
+
+        db.query(revenResep, (err, resultRevenResep) => {
+            if (err) {
+                console.log(err)
+                res.status(400).send(err)
+            }
+            let jumlahRevResep = resultRevenResep.length
+            let maxPage = Math.ceil(jumlahRevResep / 10)
+            let offsetPage = (page * 10) - 10
+
+            let paginationSatuan = `select * from payment_satuan p
+            join order_satuan r
+            on p.order_number = r.order_number
+            where date like '%/${name}/%' limit 10 offset ${offsetPage};`
+
+            db.query(paginationSatuan, (err, resultRevensatuan) => {
+                if (err) {
+                    console.log(err)
+                    res.status(400).send(err)
+                }
+
+                res.status(200).send([...resultRevensatuan, maxPage])
+            })
+        })    
+    },
+    totalRevSatJuly : (req, res) => {
+        const { name } = req.body
+        let totalResep = `select SUM(total_belanja) as Total_Belanja from payment_satuan p
+        join order_satuan r
+        on p.order_number = r.order_number
+        where date like '%/${name}/%';` 
+
+        db.query(totalResep, (err, resultTotalRevenSatuan) => {
+            if (err) {
+                console.log(err)
+                res.status(400).send(err)
+            }
+        res.status(200).send(resultTotalRevenSatuan[0])
+        })
+    },
+
+
+
 }
+
