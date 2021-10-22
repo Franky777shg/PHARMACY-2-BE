@@ -365,5 +365,43 @@ module.exports = {
             res.status(200).send({ produkupdateqty: result })
             console.log(result)
         })
+    },
+    getDataOrderSatuan: (req, res) => {
+        const { order_number } = req.body
+        const getOrderQuery = `SELECT * FROM order_detail_satuan where order_number = ${order_number};`
+
+        db.query(getOrderQuery, (err, resultOrder) => {
+            if (err) {
+                console.log(err)
+                res.status(400).send(err)
+            }
+            res.status(200).send(resultOrder)
+        })
+    },
+    getBuktiPembayaranSatuan: (req, res) => {
+        const { order_number } = req.body
+
+        const getBukti = `SELECT payment_proof_satuan FROM payment_satuan where order_number = ${order_number};`
+
+        db.query(getBukti, (err, resultBukti) => {
+            if (err) {
+                console.log(err)
+                res.status(400).send(err)
+            }
+            res.status(200).send(resultBukti[0])
+        })
+    },
+    updateStatusSatuan: (req, res) => {
+        const { statusBaru, order_number } = req.body
+
+        let updateStatusResep = `update order_satuan set status = "${statusBaru}" where order_number = ${order_number};`
+        
+        db.query(updateStatusResep, (err, resultUpdateStatusResep) => {
+            if (err) {
+                console.log(err)
+                res.status(400).send(err)
+            }
+            res.status(200).send(resultUpdateStatusResep)
+        })
     }
 }
