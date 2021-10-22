@@ -1,10 +1,6 @@
 const router = require('express').Router()
 
 const { transactionController } = require('../controllers')
-const {verifyToken} = require('../helpers/jwt')
-const { uploadp1,uploadpr } = require('../helpers/multer')
-const uploader = uploadp1()
-const uploader1 = uploadpr()
 
 router.patch('/add-cart/:iduser', transactionController.addCart)
 router.post('/addnew-cart/:iduser', transactionController.addNewCart)
@@ -29,5 +25,8 @@ router.patch('/get-cartqty/:iduser', transactionController.getCartQty)
 router.patch('/saveqty-cart/:iduser', transactionController.saveqtyCart)
 router.get('/total-cart/:iduser', transactionController.gettotalCartUser)
 router.get('/update-produkqty/:iduser', transactionController.updateqtyProduk)
+router.post('/getDataOrderSatuan', transactionController.getDataOrderSatuan)
+router.post('/getBuktiPembayaranSatuan', transactionController.getBuktiPembayaranSatuan)
+router.post('/updateStatusSatuan', transactionController.updateStatusSatuan)
 
 module.exports = router
