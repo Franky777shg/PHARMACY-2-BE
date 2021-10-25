@@ -10,7 +10,7 @@ module.exports = {
 
         const { username, email, password } = req.body
 
-        const getUser = `select * from user where (username = ${db.escape(username)} or email = ${db.escape(username)}) and password = ${db.escape(password)};`
+        const getUser = `select * from user where (username = ${db.escape(username)} or email = ${db.escape(email)}) and password = ${db.escape(password)};`
         
         console.log(getUser)
         db.query(getUser, (err, result) => {

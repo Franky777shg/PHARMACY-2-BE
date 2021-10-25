@@ -134,7 +134,7 @@ module.exports = {
         const { page } = req.body
         let revenResep = `select * from payment_resep p
         join order_resep r
-        on p.order_number = r.order_number;` 
+        on p.order_number = r.order_number where status = 'Complete';` 
 
         db.query(revenResep, (err, resultRevenResep) => {
             if (err) {
@@ -147,7 +147,7 @@ module.exports = {
 
             let paginationSatuan = `select * from payment_resep p
             join order_resep r
-            on p.order_number = r.order_number limit 10 offset ${offsetPage};`
+            on p.order_number = r.order_number where status = 'Complete' limit 10 offset ${offsetPage};`
 
             db.query(paginationSatuan, (err, resultRevenResep) => {
                 if (err) {
@@ -161,7 +161,11 @@ module.exports = {
     },
     totalRevenueResep : (req, res) => {
         // const {SUM(total_belanja)} = req.body
-        let totalResep = `select SUM(total_belanja) as Total_Belanja from payment_resep;` 
+        // let totalResep = `select SUM(total_belanja) as Total_Belanja from payment_resep;` 
+        let totalResep = `select SUM(total_belanja) as Total_Belanja from payment_resep p
+        join order_resep r
+        on p.order_number = r.order_number
+        where status = 'Complete';`
 
         db.query(totalResep, (err, resultTotalRevenResep) => {
             if (err) {
@@ -175,7 +179,7 @@ module.exports = {
         const { page } = req.body
         let revenResep = `select * from payment_satuan p
         join order_satuan s
-        on p.order_number = s.order_number;` 
+        on p.order_number = s.order_number where status = 'Complete';` 
 
         db.query(revenResep, (err, resultRevenResep) => {
             if (err) {
@@ -188,7 +192,7 @@ module.exports = {
 
             let paginationSatuan = `select * from payment_satuan p
             join order_satuan s
-            on p.order_number = s.order_number limit 10 offset ${offsetPage};`
+            on p.order_number = s.order_number where status = 'Complete' limit 10 offset ${offsetPage};`
 
             db.query(paginationSatuan, (err, resultRevensatuan) => {
                 if (err) {
@@ -202,9 +206,13 @@ module.exports = {
     },
     totalRevenueSatuan : (req, res) => {
         // const {SUM(total_belanja)} = req.body
-        let totalResep = `select SUM(total_belanja) as Total_Belanja from payment_satuan;` 
+        // let totalResep = `select SUM(total_belanja) as Total_Belanja from payment_satuan;` 
+        let totalSatuan = `select SUM(total_belanja) as Total_Belanja from payment_satuan p
+        join order_satuan r
+        on p.order_number = r.order_number
+        where status = 'Complete';`
 
-        db.query(totalResep, (err, resultTotalRevenSatuan) => {
+        db.query(totalSatuan, (err, resultTotalRevenSatuan) => {
             if (err) {
                 console.log(err)
                 res.status(400).send(err)
@@ -219,7 +227,7 @@ module.exports = {
         let revenResep = `select * from payment_resep p
         join order_resep r
         on p.order_number = r.order_number
-        where date like '%/${name}/%'; ` 
+        where date like '%/${name}/%' and status = 'Complete'; ` 
 
         db.query(revenResep, (err, resultRevenResep) => {
             if (err) {
@@ -233,7 +241,7 @@ module.exports = {
             let paginationSatuan = `select * from payment_resep p
             join order_resep r
             on p.order_number = r.order_number
-            where date like '%/${name}/%' limit 10 offset ${offsetPage};`
+            where date like '%/${name}/%' and status = 'Complete' limit 10 offset ${offsetPage};`
 
             db.query(paginationSatuan, (err, resultRevensatuan) => {
                 if (err) {
@@ -250,7 +258,7 @@ module.exports = {
         let totalResep = `select SUM(total_belanja) as Total_Belanja from payment_resep p
         join order_resep r
         on p.order_number = r.order_number
-        where date like '%/${name}/%';` 
+        where date like '%/${name}/%' and status = 'Complete';` 
 
         db.query(totalResep, (err, resultTotalRevenSatuan) => {
             if (err) {
@@ -260,7 +268,6 @@ module.exports = {
         res.status(200).send(resultTotalRevenSatuan[0])
         })
     },
-    
 
     //perbulan_SATUAN
     revenueSatJuly : (req, res) => {
@@ -268,7 +275,7 @@ module.exports = {
         let revenResep = `select * from payment_satuan p
         join order_satuan r
         on p.order_number = r.order_number
-        where date like '%/${name}/%'; ` 
+        where date like '%/${name}/%' and status = 'Complete'; ` 
 
         db.query(revenResep, (err, resultRevenResep) => {
             if (err) {
@@ -282,7 +289,7 @@ module.exports = {
             let paginationSatuan = `select * from payment_satuan p
             join order_satuan r
             on p.order_number = r.order_number
-            where date like '%/${name}/%' limit 10 offset ${offsetPage};`
+            where date like '%/${name}/%' and status = 'Complete' limit 10 offset ${offsetPage};`
 
             db.query(paginationSatuan, (err, resultRevensatuan) => {
                 if (err) {
@@ -299,7 +306,7 @@ module.exports = {
         let totalResep = `select SUM(total_belanja) as Total_Belanja from payment_satuan p
         join order_satuan r
         on p.order_number = r.order_number
-        where date like '%/${name}/%';` 
+        where date like '%/${name}/%' and status = 'Complete';` 
 
         db.query(totalResep, (err, resultTotalRevenSatuan) => {
             if (err) {

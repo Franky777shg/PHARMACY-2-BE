@@ -104,19 +104,23 @@ module.exports = {
             console.log(result)
         })
     },
+
+    //ON_GOING
     getTransaksiObtResepOnGoing: (req, res) => {
         // const getQuery = 'SELECT * FROM order_resep where status = "Waiting For Approval" or status = "Waiting For Payment" or status = "Waiting For Payment Approval" or status = "Processing" or status = "Sending Package";'
+        const { page } = req.body
         const getQuery = 'select * from user u join order_resep r on u.iduser = r.iduser where status = "Waiting For Approval" or status = "Waiting For Payment" or status = "Waiting For Payment Approval" or status = "Processing" or status = "Sending Package";'
 
-        db.query(getQuery, (err, result) => {
+        db.query(getQuery, (err, resultongoing) => {
             if (err) {
                 console.log(err)
                 res.status(400).send(err)
             }
-
-            res.status(200).send(result)
+                res.status(200).send(resultongoing)
         })
     },
+
+    //COMPLETE
     getTransaksiObtResepComplete: (req, res) => {
         // const getQuery = 'SELECT * FROM order_resep where status = "Complete";'
         const getQuery = 'select * from user u join order_resep r on u.iduser = r.iduser where status = "Complete";'
@@ -130,17 +134,37 @@ module.exports = {
             res.status(200).send(result)
         })
     },
+
+    //CANCEL
     getTransaksiObtResepCancel: (req, res) => {
-        const getQuery = 'SELECT * FROM order_resep where status = "Cancel";'
+        const getQuery = 'select * from user u join order_resep r on u.iduser = r.iduser where status = "Cancel";'
         db.query(getQuery, (err, result) => {
             if (err) {
                 console.log(err)
                 res.status(400).send(err)
             }
 
+            // let jumlahRevResep = resultRevenResep.length
+            // let maxPage = Math.ceil(jumlahRevResep / 10)
+            // let offsetPage = (page * 10) - 10
+
+            // let paginationSatuan = `select * from payment_resep p
+            // join order_resep r
+            // on p.order_number = r.order_number
+            // where date like '%/${name}/%' and status = 'Complete' limit 10 offset ${offsetPage};`
+
+            // db.query(paginationSatuan, (err, resultRevensatuan) => {
+            //     if (err) {
+            //         console.log(err)
+            //         res.status(400).send(err)
+            //     }
+
+            //     res.status(200).send([...resultRevensatuan, maxPage])
+            // })
             res.status(200).send(result)
         })
     },
+
     getDataOrder: (req, res) => {
         const { order_number } = req.body
         const getOrderQuery = `SELECT * FROM order_resep where order_number = ${order_number};`
