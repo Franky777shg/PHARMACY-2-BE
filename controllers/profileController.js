@@ -73,7 +73,6 @@ module.exports = {
         })
     },
 
-   
     uploadResepPic: (req, res) => {
         const id = req.params.id
         
@@ -91,6 +90,42 @@ module.exports = {
                 res.status(400).send(err)
             }
             res.status(200).send(`images/photoResep/${req.file.filename}`)
+        })
+    },
+
+    getByIdUser: (req, res) => {
+        let getQuery = `select * from order_resep where iduser = ${db.escape(req.body.iduser)}`
+
+        db.query(getQuery, (err, result) => {
+            if (err) {
+                console.log(err)
+                res.status(400).send(err)
+            }
+            res.status(200).send(result)
+        })
+    },
+
+    cekDataResep: (req, res) => {
+        let getQuery = `select * from order_resep where iduser = ${db.escape(req.body.iduser)} and status = 'Waiting For Approval';`
+
+        db.query(getQuery, (err, result) => {
+            if (err) {
+                console.log(err)
+                res.status(400).send(err)
+            }
+            res.status(200).send(result[0])
+        })
+    },
+
+    cekDataWaitingPay: (req, res) => {
+        let getQuery = `select * from order_resep where iduser = ${db.escape(req.body.iduser)} and status = 'Waiting For Payment';`
+
+        db.query(getQuery, (err, result) => {
+            if (err) {
+                console.log(err)
+                res.status(400).send(err)
+            }
+            res.status(200).send(result[0])
         })
     },
 

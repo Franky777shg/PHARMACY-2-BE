@@ -15,4 +15,8 @@ router.post('/newdata', profileController.addDataResep)
 router.get('/byid/:id', profileController.getById)
 router.post('/resep/:id', resep, profileController.uploadResepPic)
 
+router.post('/resepid-user', profileController.getByIdUser)
+router.post('/cekdata', profileController.cekDataResep)
+router.post('/cekdatapay', profileController.cekDataWaitingPay)
+
 module.exports = router
