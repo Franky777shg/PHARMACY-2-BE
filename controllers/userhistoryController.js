@@ -41,7 +41,7 @@ module.exports = {
     from order_satuan a
     inner join order_detail_satuan b
     on a.order_number=b.order_number
-    where a.iduser=${req.params.iduser} AND a.status='Complete';`
+    where a.iduser=${req.params.iduser} AND a.status IN ('Complete', 'Cancel') ;`
         db.query(posthistoryComplete, (err, res) => {
             if (err) {
                 console.log(err)
@@ -290,7 +290,7 @@ module.exports = {
     from order_satuan a
     inner join order_detail_satuan b
     on a.order_number=b.order_number
-    where a.iduser=${req.params.iduser} AND a.status='Complete' group by a.order_number;`
+    where a.iduser=${req.params.iduser} AND a.status IN ('Complete', 'Cancel')  group by a.order_number;`
         db.query(getHist, (err, result) => {
             if (err) {
                 console.log(err)
@@ -590,7 +590,7 @@ module.exports = {
                     from order_satuan a
                     inner join order_detail_satuan b
                     on a.order_number=b.order_number
-                    where a.status IN ('Complete') AND a.iduser=${req.params.iduser} AND a.order_number=${db.escape(req.body.order_number)};`
+                    where a.status IN ('Complete', 'Cancel') AND a.iduser=${req.params.iduser} AND a.order_number=${db.escape(req.body.order_number)};`
             db.query(total_bayar, (err2, res2) => {
                 if (err2) {
                     console.log(err2)
@@ -604,7 +604,7 @@ module.exports = {
                     from order_satuan a
                     inner join order_detail_satuan b
                     on a.order_number=b.order_number
-                    where a.status IN ('Complete') AND a.iduser=${req.params.iduser} AND a.order_number=${db.escape(req.body.order_number)};`
+                    where a.status IN ('Complete', 'Cancel') AND a.iduser=${req.params.iduser} AND a.order_number=${db.escape(req.body.order_number)};`
                 db.query(detailproduk, (err3, res3) => {
                     if (err3) {
                         console.log(err3)
@@ -626,7 +626,7 @@ module.exports = {
             from order_resep a
             inner join order_detail_resep b
             on a.order_number=b.order_number
-            where a.status IN ('Complete') AND a.iduser=${req.params.iduser} group by a.order_number;`
+            where a.status IN ('Complete','Cancel') AND a.iduser=${req.params.iduser} group by a.order_number;`
         db.query(getordernumberR, (err1, res1) => {
             if (err1) {
                 console.log(err1)
@@ -683,5 +683,16 @@ module.exports = {
                 })
             })
         })
+    },
+    cancelTransactionR: (req,res) => {
+        let posthistory = `update order_resep set status='Cancel' where order_number=${db.escape(req.body.order_number)} AND iduser=${req.params.iduser}`
+            db.query(posthistory, (err1, result1) => {
+                if (err1) {
+                    console.log(err1)
+                    res.status(400).send(err1)
+                }
+                res.status(200).send({ history: result1 })
+                console.log(result1)
+            })
     }
 }

@@ -579,9 +579,11 @@ module.exports = {
         })
     },
     addProductRdata: (req, res) => {
-        const { nama, harga, kategori, stokbotol, stokml } = req.body
+        const { nama, harga, kategori, stokbotol } = req.body
+        // {Math.floor(item.stok_ml/100)} botol {item.stok_ml%100} ml
+        let stokml = (+req.body.stokbotol)*100 + (+req.body.stokml)
         let addProductR = `update produk_resep set nama=${db.escape(nama)}, harga=${db.escape(harga)}, kategori=${db.escape(kategori)}, 
-            stok_botol=${db.escape(stokbotol)}, stok_ml=${db.escape(stokml)}
+            stok_ml=${db.escape(stokml)}
             where link_foto = 'images/produk_resep/${req.body.hasil.foto}'`
         let getidprodukr = `select idproduk_resep from produk_resep where link_foto = 'images/produk_resep/${req.body.hasil.foto}'`
         db.query(addProductR, req.body, (err1, result1) => {
@@ -695,11 +697,9 @@ module.exports = {
     editProductRdata: (req, res) => {
         console.log(req.body)
         //data aja
-        const { nama, harga, stok, satuan, kategori, deskripsi, indikasi_umum, komposisi, dosis, aturan_pakai, kontra_indikasi, perhatian, efek_samping, segmentasi, kemasan, manufaktur, no_registrasi, idproduct } = req.body
-        let addProductR = `update produk_resep set nama=${db.escape(nama)}, harga=${db.escape(harga)}, stok=${db.escape(stok)}, satuan=${db.escape(satuan)}, kategori=${db.escape(kategori)}, 
-                deskripsi=${db.escape(deskripsi)}, indikasi_umum=${db.escape(indikasi_umum)}, komposisi=${db.escape(komposisi)}, dosis=${db.escape(dosis)}, aturan_pakai=${db.escape(aturan_pakai)}, kontra_indikasi=${db.escape(kontra_indikasi)},
-                perhatian=${db.escape(perhatian)}, efek_samping=${db.escape(efek_samping)}, segmentasi=${db.escape(segmentasi)}, kemasan=${db.escape(kemasan)}, manufaktur=${db.escape(manufaktur)}, no_registrasi=${db.escape(no_registrasi)}
-                where idproduk_resep = ${db.escape(idproduct)}`
+        const { nama, harga, stok_ml, kategori, idproduk_resep } = req.body
+        let addProductR = `update produk_resep set nama=${db.escape(nama)}, harga=${db.escape(harga)}, stok_ml=${db.escape(stok_ml)}, kategori=${db.escape(kategori)} 
+                where idproduk_resep = ${db.escape(idproduk_resep)};`
         // let getidproduk = `select idproduk from produk_satuan where link_foto = 'images/produk_satuan/${req.body.hasil.foto}'`
         db.query(addProductR, req.body, (err1, result1) => {
             if (err1) {
@@ -765,5 +765,98 @@ module.exports = {
             }
             console.log(result1)
             res.status(200).send(result1)
-        })}
+        })},
+        addProduct1datatanpafoto: (req, res) => {
+            // console.log(req.body, req.body.hasil.foto)
+            const { nama, harga, stok, satuan, kategori, deskripsi, indikasi_umum, komposisi, dosis, aturan_pakai, kontra_indikasi, perhatian, efek_samping, segmentasi, kemasan, manufaktur, no_registrasi } = req.body
+            let addProduct1an = `insert into produk_satuan set nama=${db.escape(nama)}, harga=${db.escape(harga)}, stok=${db.escape(stok)}, satuan=${db.escape(satuan)}, kategori=${db.escape(kategori)}, 
+                deskripsi=${db.escape(deskripsi)}, indikasi_umum=${db.escape(indikasi_umum)}, komposisi=${db.escape(komposisi)}, dosis=${db.escape(dosis)}, aturan_pakai=${db.escape(aturan_pakai)}, kontra_indikasi=${db.escape(kontra_indikasi)},
+                perhatian=${db.escape(perhatian)}, efek_samping=${db.escape(efek_samping)}, segmentasi=${db.escape(segmentasi)}, kemasan=${db.escape(kemasan)}, manufaktur=${db.escape(manufaktur)}, no_registrasi=${db.escape(no_registrasi)}
+                , link_foto = 'images/produk_satuan/defaultobat.png'`
+    
+            // let getidproduk = `select idproduk from produk_satuan where link_foto = 'images/produk_satuan/${req.body.hasil.foto}'`
+            db.query(addProduct1an, req.body, (err1, result1) => {
+                if (err1) {
+                    // console.log(err1.response.data)
+                    // console.log(req.file.filename)
+                    res.status(400).send(err1)
+                }
+                console.log(result1)
+                // res.status(200).send({data:result1})
+                // db.query(getidproduk, req.body, (err2, result2) => {
+                //     if (err2) {
+                //         // console.log(err1.response.data)
+                //         // console.log(req.file.filename)
+                //         res.status(400).send(err2.response.data)
+                //     }
+                    res.status(200).send({ data: result1 })
+                // })
+            })
+    
+        },
+        addProductRdatatanpafoto: (req, res) => {
+            const { nama, harga, kategori, stokbotol } = req.body
+            // {Math.floor(item.stok_ml/100)} botol {item.stok_ml%100} ml
+            let stokml = (+req.body.stokbotol)*100 + (+req.body.stokml)
+            let addProductR = `insert into produk_resep set nama=${db.escape(nama)}, harga=${db.escape(harga)}, kategori=${db.escape(kategori)}, 
+                stok_ml=${db.escape(stokml)}
+                ,link_foto = 'images/produk_resep/defaultobat.png'`
+            // let getidprodukr = `select idproduk_resep from produk_resep where link_foto = 'images/produk_resep/${req.body.hasil.foto}'`
+            db.query(addProductR, req.body, (err1, result1) => {
+                if (err1) {
+                    // console.log(err1.response.data)
+                    // console.log(req.file.filename)
+                    res.status(400).send(err1.response.data)
+                }
+                console.log(result1)
+                // res.status(200).send({data:result1})
+                // db.query(getidprodukr, req.body, (err2, result2) => {
+                //     if (err2) {
+                //         // console.log(err1.response.data)
+                //         // console.log(req.file.filename)
+                //         res.status(400).send(err2.response.data)
+                //     }
+                    res.status(200).send({ data: result1 })
+                // })
+            })
+        },
+        removeProduct1foto: (req, res) => {
+            // console.log(req.file)
+            // console.log(req.params)
+            // const { idproduct } = req.body
+            // if (!req.file) {
+            //     res.status(400).send('NO FILE')
+            // }
+    
+            const uploadPict = `update produk_satuan set link_foto='images/produk_satuan/defaultobat.png' where idproduk =${req.params.idproduct}`
+            db.query(uploadPict, (err, result) => {
+                if (err) {
+                    console.log(err)
+                    res.status(400).send(err)
+                }
+                // res.status(200).send({ foto: req.file.filename })
+                res.status(200).send('Berhasil remove foto produk satuan menjadi default')
+                // console.log(req.file.filename)
+            })
+        },
+        removeProductRfoto: (req, res) => {
+            // console.log(req.file)
+            // console.log(req.params)
+            // const { idproduct } = req.body
+            // if (!req.file) {
+            //     res.status(400).send('NO FILE')
+            // }
+    
+            const uploadPict = `update produk_resep set link_foto='images/produk_resep/defaultobat.png' where idproduk_resep =${req.params.idproduct}`
+            db.query(uploadPict, (err, result) => {
+                if (err) {
+                    console.log(err)
+                    res.status(400).send(err)
+                }
+                res.status(200).send('Berhasil remove foto produk resep menjadi default')
+                // res.status(200).send({ foto: req.file.filename })
+                // console.log(req.file.filename)
+            })
+        }
+
 }
