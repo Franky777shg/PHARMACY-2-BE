@@ -25,5 +25,6 @@ router.post('/og-tocompleter/:iduser', userhistoryController.toCompleteR)
 router.post('/datahistory1/:iduser', userhistoryController.datahistory1)
 router.get('/get-onhistoryr/:iduser', userhistoryController.getONhistoryR)
 router.post('/datahistoryr/:iduser', userhistoryController.datahistoryr)
+router.post('/cancelr/:iduser', userhistoryController.cancelTransactionR)
 
 module.exports = router
