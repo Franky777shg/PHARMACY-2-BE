@@ -15,15 +15,27 @@ module.exports = {
         })
     },
 
+    totalHarga : (req, res) => {
+        let totalHarga = `select SUM(qty_beli * harga) as Total_Harga from order_detail_resep where order_number = ${db.escape(req.body.order_number)};`
+        db.query(totalHarga, (err, result) => {
+            if (err) {
+                console.log(err)
+                res.status(400).send(err)
+            }
+
+            res.status(200).send(result[0])
+
+        })
+    },
+
     uploadPaymentResep: (req, res) => {
-        const id = req.params.id
         console.log('req.file', req.file)
 
         if (!req.file) {
             res.status(400).send('NO FILE')
         }
         // const updatePicture = `update order_resep set image_resep = 'images/photoResep/${req.file.filename}' where idresep = ${id} order by idusers = ${db.escape(req.body.idusers)} and order_number = ${db.escape(req.body.order_number)};`
-        const updatePicture = `update payment_resep set payment_proof_resep = 'images/paymentResep/${req.file.filename}' where id_payment_resep = ${id};`
+        const updatePicture = `update payment_resep set payment_proof_resep = 'images/paymentResep/${req.file.filename}' where id_payment_resep = ${req.params.id};`
 
         db.query(updatePicture, (err, result) => {
             if (err) {
@@ -34,7 +46,11 @@ module.exports = {
         })
     },
     getPaymentById: (req, res) => {
-        const getPayQuery = `select * from payment_resep where order_number = ${req.body.order_number}`
+        const getPayQuery = `select * from payment_resep where order_number = ${db.escape(req.body.order_number)}`
+        // const getPayQuery = `select * from payment_resep p
+        // join order_resep r
+        // on r.order_number = p.order_number
+        // where p.order_number = ${db.escape(req.body.order_number)};`
 
         db.query(getPayQuery, (err, result) => {
             if (err) {
@@ -45,30 +61,33 @@ module.exports = {
             console.log(result)
         })
     },
+    updateStatus: (req, res) => {
+        const updateStatus = `update order_resep set status = 'Waiting For Payment Approval' where order_number = ${db.escape(req.body.order_number)};`
 
-    getPaymentById2: (req, res) => {
-        const getPayQuery = `select * from payment_resep where id_payment_resep = ${req.params.id}`
-
-        db.query(getPayQuery, (err, result) => {
+        db.query(updateStatus, (err, result) => {
             if (err) {
                 console.log(err)
                 res.status(400).send(err)
             }
-            res.status(200).send(result)
+            res.status(200).send('Waiting For Payment Approval')
             console.log(result)
         })
     },
-    getAllPaymentResep: (req, res) => {
-        let getQuery = `select * from payment_resep;`
 
-        db.query(getQuery, (err, result) => {
+    prosesTransac: (req, res) => {
+        const prosesTran = `update order_resep set status = 'Waiting For Payment Approval' where order_number = ${db.escape(req.body.order_number)};`
+
+        db.query(prosesTran, (err, result) => {
             if (err) {
                 console.log(err)
                 res.status(400).send(err)
             }
-            res.status(200).send(result)
+            res.status(200).send('Waiting For Payment Approval')
+            console.log(result)
         })
     },
+    
+
 
 }
 

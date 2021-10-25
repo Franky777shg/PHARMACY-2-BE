@@ -7,9 +7,11 @@ router.post('/addnew-cart/:iduser', transactionController.addNewCart)
 router.get('/get-cart/:iduser', transactionController.getCartUser)
 router.post('/push-cart/:iduser', transactionController.pushCart)
 router.patch('/delrow-cart/:idProdCart', transactionController.deleterowCart)
+
 router.get('/getTransOROnGoing', transactionController.getTransaksiObtResepOnGoing)
 router.get('/getTransORComplete', transactionController.getTransaksiObtResepComplete)
 router.get('/getTransORCancel', transactionController.getTransaksiObtResepCancel)
+
 router.post('/getDataOrder', transactionController.getDataOrder)
 router.post('/cariBahan', transactionController.cariBahan)
 router.post('/pilihBahan', transactionController.pilihBahanResep)
