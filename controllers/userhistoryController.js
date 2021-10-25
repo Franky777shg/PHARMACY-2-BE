@@ -111,54 +111,54 @@ module.exports = {
         console.log(req.body.order_number, 'ordernumbercomplete')
         // const {iduser} = req.body
         //ambil ordernumber status cart
-    //     let getCart = `select a.order_number,b.idproduk,b.nama,b.product_image,b.qty_beli,b.harga,b.total_harga,a.status,a.date
-    // from order_satuan a
-    // inner join order_detail_satuan b
-    // on a.order_number=b.order_number
-    // where a.iduser=${req.params.iduser} AND a.status='Sending Package';`
-    //     db.query(getCart, (err, result) => {
-    //         if (err) {
-    //             console.log(err)
-    //             res.status(400).send(err)
-    //         }
-            // res.status(200).send({cart: result})
-            //edit ordernumber status ubah dr cart jd ongoing
-            let posthistory = `update order_satuan set status='Complete' where order_number=${db.escape(req.body.order_number)} AND iduser=${req.params.iduser}`
-            db.query(posthistory, (err1, result1) => {
-                if (err1) {
-                    console.log(err1)
-                    res.status(400).send(err1)
-                }
-                res.status(200).send({ history: result1 })
-                console.log(result1)
-            })
+        //     let getCart = `select a.order_number,b.idproduk,b.nama,b.product_image,b.qty_beli,b.harga,b.total_harga,a.status,a.date
+        // from order_satuan a
+        // inner join order_detail_satuan b
+        // on a.order_number=b.order_number
+        // where a.iduser=${req.params.iduser} AND a.status='Sending Package';`
+        //     db.query(getCart, (err, result) => {
+        //         if (err) {
+        //             console.log(err)
+        //             res.status(400).send(err)
+        //         }
+        // res.status(200).send({cart: result})
+        //edit ordernumber status ubah dr cart jd ongoing
+        let posthistory = `update order_satuan set status='Complete' where order_number=${db.escape(req.body.order_number)} AND iduser=${req.params.iduser}`
+        db.query(posthistory, (err1, result1) => {
+            if (err1) {
+                console.log(err1)
+                res.status(400).send(err1)
+            }
+            res.status(200).send({ history: result1 })
+            console.log(result1)
+        })
         // })
-    },toCompleteR: (req, res) => {
+    }, toCompleteR: (req, res) => {
         console.log(req.body)
         console.log(req.params.iduser)
         // const {iduser} = req.body
         //ambil ordernumber status cart
-    //     let getCart = `select a.order_number,b.idproduk,b.nama,b.product_image,b.qty_beli,b.harga,b.total_harga,a.status,a.date
-    // from order_satuan a
-    // inner join order_detail_satuan b
-    // on a.order_number=b.order_number
-    // where a.iduser=${req.params.iduser} AND a.status='Sending Package';`
-    //     db.query(getCart, (err, result) => {
-    //         if (err) {
-    //             console.log(err)
-    //             res.status(400).send(err)
-    //         }
-            // res.status(200).send({cart: result})
-            //edit ordernumber status ubah dr cart jd ongoing
-            let posthistory = `update order_resep set status='Complete' where order_number=${db.escape(req.body.order_number)} AND iduser=${req.params.iduser}`
-            db.query(posthistory, (err1, result1) => {
-                if (err1) {
-                    console.log(err1)
-                    res.status(400).send(err1)
-                }
-                res.status(200).send({ history: result1 })
-                console.log(result1)
-            })
+        //     let getCart = `select a.order_number,b.idproduk,b.nama,b.product_image,b.qty_beli,b.harga,b.total_harga,a.status,a.date
+        // from order_satuan a
+        // inner join order_detail_satuan b
+        // on a.order_number=b.order_number
+        // where a.iduser=${req.params.iduser} AND a.status='Sending Package';`
+        //     db.query(getCart, (err, result) => {
+        //         if (err) {
+        //             console.log(err)
+        //             res.status(400).send(err)
+        //         }
+        // res.status(200).send({cart: result})
+        //edit ordernumber status ubah dr cart jd ongoing
+        let posthistory = `update order_resep set status='Complete' where order_number=${db.escape(req.body.order_number)} AND iduser=${req.params.iduser}`
+        db.query(posthistory, (err1, result1) => {
+            if (err1) {
+                console.log(err1)
+                res.status(400).send(err1)
+            }
+            res.status(200).send({ history: result1 })
+            console.log(result1)
+        })
         // })
     },
     getonGoing: (req, res) => {
@@ -369,7 +369,7 @@ module.exports = {
                 console.log(err1)
                 res.status(400).send(err1)
             }
-            let postfotopmt = `update payment_satuan set payment_proof_satuan = ${db.escape(proof)} where order_number= ${db.escape(res1[0].order_number)} AND iduser =${iduser}`
+            let postfotopmt = `update payment_satuan set payment_proof_satuan = 'images/paymentSatuan/${req.file.filename}' where order_number= ${db.escape(res1[0].order_number)} AND iduser =${iduser}`
             db.query(postfotopmt, (err, result) => {
                 if (err) {
                     console.log(err)
@@ -409,17 +409,17 @@ module.exports = {
         //         console.log(err)
         //         res.status(400).send(err)
         //     }
-            // res.status(200).send({cart: result})
-            //edit ordernumber status ubah dr cart jd ongoing
-            let posthistory = `update order_satuan set status='Waiting For Payment Approval' where order_number=${db.escape(req.body.order_number)}`
-            db.query(posthistory, (err1, result1) => {
-                if (err1) {
-                    console.log(err1)
-                    res.status(400).send(err1)
-                }
-                res.status(200).send({ ongoing: result1 })
-                console.log(result1)
-            })
+        // res.status(200).send({cart: result})
+        //edit ordernumber status ubah dr cart jd ongoing
+        let posthistory = `update order_satuan set status='Waiting For Payment Approval' where order_number=${db.escape(req.body.order_number)}`
+        db.query(posthistory, (err1, result1) => {
+            if (err1) {
+                console.log(err1)
+                res.status(400).send(err1)
+            }
+            res.status(200).send({ ongoing: result1 })
+            console.log(result1)
+        })
         // })
     },
     getordernumber: (req, res) => {
@@ -489,11 +489,9 @@ module.exports = {
         })
     },
     getordernumberR: (req, res) => {
-        let getordernumberR = `select a.order_number
-            from order_resep a
-            inner join order_detail_resep b
-            on a.order_number=b.order_number
-            where a.status IN ('Waiting For Approval', 'Waiting For Payment', 'Waiting For Payment Approval', 'Sending Package', 'Processing') AND a.iduser=${req.params.iduser} group by a.order_number;`
+        let getordernumberR = `select order_number
+        from order_resep
+        where status IN ('Waiting For Approval', 'Waiting For Payment', 'Waiting For Payment Approval', 'Sending Package', 'Processing') AND iduser=${req.params.iduser};`
         db.query(getordernumberR, (err1, res1) => {
             if (err1) {
                 console.log(err1)
@@ -515,6 +513,7 @@ module.exports = {
             res1[0].products = []
             // res1[0].total_bayar = null
             allArr.push(res1[0])
+            console.log(res1[0].status)
             let total_bayar = `select a.total_belanja, b.status
                     from payment_resep a
                     inner join order_resep b
@@ -526,35 +525,10 @@ module.exports = {
                         on a.order_number=b.order_number
                         where b.status IN ('Waiting For Approval','Waiting For Payment', 'Waiting For Payment Approval', 'Sending Package', 'Processing') AND b.iduser=${req.params.iduser} AND a.order_number=${db.escape(req.body.order_number)};`
             // console.log('allArr', allArr)
+
+            let bayar_payment = `select * from order_detail_resep where order_number = ${db.escape(req.body.order_number)}`
             
-            if (res1[0].status ==='Waiting For Approval'){
-                db.query(detailproduk, (err3, res3) => {
-                    if (err3) {
-                        console.log(err3)
-                        res.status(400).send(err3)
-                    }
-                    res1[0].products = res3
-                    // allArr.res1[0].products.push(res3)
-                    // console.log(res3)
-                    console.log(allArr, 'a')
-
-                    res.status(200).send(allArr)
-
-                })
-            }
-            else{
-                db.query(total_bayar, (err2, res2) => {
-                    if (err2) {
-                        console.log(err2)
-                    }
-                    console.log(res2)
-
-                    // allArr.push(res1[0],res1[0].total_bayar=res2[0].total_bayar)
-                    // console.log(res1[0].total_bayar)
-                    res1[0].total_belanja = res2[0].total_belanja
-                    // console.log(res1[0].total_bayar)
-                    // console.log(allArr,'allarr')
-                    // allArr.push(res1[0])
+                if (res1[0].status === 'Waiting For Approval') {
                     db.query(detailproduk, (err3, res3) => {
                         if (err3) {
                             console.log(err3)
@@ -568,8 +542,61 @@ module.exports = {
                         res.status(200).send(allArr)
 
                     })
-                })
-            }
+                }
+                else if (res1[0].status === 'Waiting For Payment'){
+                    db.query(bayar_payment, (err4, res4) => {
+                        let totalharga = 0
+                        res4.map(item => {
+                            totalharga = totalharga + (item.qty_beli*item.harga)
+                            
+                        })
+                        res1[0].total_belanja = totalharga
+                        db.query(detailproduk, (err3, res3) => {
+                            if (err3) {
+                                console.log(err3)
+                                res.status(400).send(err3)
+                            }
+                            res1[0].products = res3
+                            // allArr.res1[0].products.push(res3)
+                            // console.log(res3)
+                            console.log(allArr, 'a')
+
+                            res.status(200).send(allArr)
+
+                        })
+                    })
+                }
+                else {
+                    db.query(total_bayar, (err2, res2) => {
+                        if (err2) {
+                            console.log(err2)
+                        }
+                        console.log(res2)
+
+                        // allArr.push(res1[0],res1[0].total_bayar=res2[0].total_bayar)
+                        // console.log(res1[0].total_bayar)
+                        res1[0].total_belanja = res2[0].total_belanja
+                        // console.log(res1[0].total_bayar)
+                        // console.log(allArr,'allarr')
+                        // allArr.push(res1[0])
+                        db.query(detailproduk, (err3, res3) => {
+                            if (err3) {
+                                console.log(err3)
+                                res.status(400).send(err3)
+                            }
+                            res1[0].products = res3
+                            // allArr.res1[0].products.push(res3)
+                            // console.log(res3)
+                            console.log(allArr, 'a')
+
+                            res.status(200).send(allArr)
+
+                        })
+                    })
+                }
+            
+
+
         })
     },
     datahistory1: (req, res) => {
@@ -684,15 +711,15 @@ module.exports = {
             })
         })
     },
-    cancelTransactionR: (req,res) => {
+    cancelTransactionR: (req, res) => {
         let posthistory = `update order_resep set status='Cancel' where order_number=${db.escape(req.body.order_number)} AND iduser=${req.params.iduser}`
-            db.query(posthistory, (err1, result1) => {
-                if (err1) {
-                    console.log(err1)
-                    res.status(400).send(err1)
-                }
-                res.status(200).send({ history: result1 })
-                console.log(result1)
-            })
+        db.query(posthistory, (err1, result1) => {
+            if (err1) {
+                console.log(err1)
+                res.status(400).send(err1)
+            }
+            res.status(200).send({ history: result1 })
+            console.log(result1)
+        })
     }
 }

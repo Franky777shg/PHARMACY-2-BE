@@ -39,7 +39,7 @@ module.exports = {
                 console.log(err)
                 res.status(400).send(err)
             }
-            res.status(200).send(`Produk berhasil di push dengan data terbaru pada order:${order_number}`)
+            res.status(200).send(`Produk berhasil di push dengan data terbaru pada order:${db.escape(order_number)}`)
             console.log(result)
         })
     }, addqtyCart: (req, res) => {
@@ -87,7 +87,7 @@ module.exports = {
                     res.status(400).send(err1)
                 }
                 console.log(result1)
-                res.status(200).send(`Produk berhasil dimasukkan ke cart, order:${order_number}`)
+                res.status(200).send(`Produk berhasil dimasukkan ke cart, order:${db.escape(order_number)}`)
             })
         })
     },
@@ -167,7 +167,7 @@ module.exports = {
 
     getDataOrder: (req, res) => {
         const { order_number } = req.body
-        const getOrderQuery = `SELECT * FROM order_resep where order_number = ${order_number};`
+        const getOrderQuery = `SELECT * FROM order_resep where order_number = ${db.escape(order_number)};`
 
         db.query(getOrderQuery, (err, resultOrder) => {
             if (err) {
@@ -229,7 +229,7 @@ module.exports = {
     updateStatusResep: (req, res) => {
         const { statusBaru, order_number } = req.body
 
-        let updateStatusResep = `update order_resep set status = "${statusBaru}" where order_number = ${order_number};`
+        let updateStatusResep = `update order_resep set status = "${statusBaru}" where order_number = ${db.escape(order_number)};`
         db.query(updateStatusResep, (err, resultUpdateStatusResep) => {
             if (err) {
                 console.log(err)
@@ -241,7 +241,7 @@ module.exports = {
     rejectTransactionResep: (req, res) => {
         const { statusBaru, order_number } = req.body
 
-        let rejectResep = `update order_resep set status = "${statusBaru}" where order_number = ${order_number};`
+        let rejectResep = `update order_resep set status = "${statusBaru}" where order_number = ${db.escape(order_number)};`
 
         db.query(rejectResep, (err, resultRejectResep) => {
             if (err) {
@@ -254,7 +254,7 @@ module.exports = {
     getDetailOrderResep: (req, res) => {
         const { order_number } = req.body
 
-        const getDetail = `select * from order_detail_resep where order_number = ${order_number};`
+        const getDetail = `select * from order_detail_resep where order_number = ${db.escape(order_number)};`
 
         db.query(getDetail, (err, resultDetailOrder) => {
             if (err) {
@@ -267,7 +267,7 @@ module.exports = {
     getImageBuktiPembayaranResep: (req, res) => {
         const { order_number } = req.body
 
-        const query = `select payment_proof_resep from payment_resep where order_number = ${order_number};`
+        const query = `select payment_proof_resep from payment_resep where order_number = ${db.escape(order_number)};`
 
         db.query(query, (err, resultImageBuktiPembayaranResep) => {
             if (err) {
@@ -280,7 +280,7 @@ module.exports = {
     getDetailOrderSatuan: (req, res) => {
         const { order_number } = req.body
 
-        const getDetail = `select * from order_detail_satuan where order_number = ${order_number};`
+        const getDetail = `select * from order_detail_satuan where order_number = ${db.escape(order_number)};`
 
         db.query(getDetail, (err, resultDetailOrder) => {
             if (err) {
@@ -392,7 +392,7 @@ module.exports = {
     },
     getDataOrderSatuan: (req, res) => {
         const { order_number } = req.body
-        const getOrderQuery = `SELECT * FROM order_detail_satuan where order_number = ${order_number};`
+        const getOrderQuery = `SELECT * FROM order_detail_satuan where order_number = ${db.escape(order_number)};`
 
         db.query(getOrderQuery, (err, resultOrder) => {
             if (err) {
@@ -405,7 +405,7 @@ module.exports = {
     getBuktiPembayaranSatuan: (req, res) => {
         const { order_number } = req.body
 
-        const getBukti = `SELECT payment_proof_satuan FROM payment_satuan where order_number = ${order_number};`
+        const getBukti = `SELECT payment_proof_satuan FROM payment_satuan where order_number = ${db.escape(order_number)};`
 
         db.query(getBukti, (err, resultBukti) => {
             if (err) {
@@ -418,7 +418,7 @@ module.exports = {
     updateStatusSatuan: (req, res) => {
         const { statusBaru, order_number } = req.body
 
-        let updateStatusResep = `update order_satuan set status = "${statusBaru}" where order_number = ${order_number};`
+        let updateStatusResep = `update order_satuan set status = "${statusBaru}" where order_number = ${db.escape(order_number)};`
         
         db.query(updateStatusResep, (err, resultUpdateStatusResep) => {
             if (err) {

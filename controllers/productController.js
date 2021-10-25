@@ -736,13 +736,13 @@ module.exports = {
     getDataUsageRawMaterial: (req, res) => {
         let id = req.params.idproduct
 
-        let getQueryUsage = `select t1.date, t1.time, t1.order_number, t2.idproduk, t2.nama_produk, t2.qty_beli
+        let getQueryUsage = `select t1.date, t1.time, t1.order_number, t2.idproduk_resep, t2.nama_produk, t2.qty_beli
                         from 
                             order_resep t1
                         inner join 
                             order_detail_resep t2 
                             on t1.order_number = t2.order_number
-                            where t2.idproduk = ${id} and t1.status = "Complete";`
+                            where t2.idproduk_resep = ${id} and t1.status = "Complete";`
 
         db.query(getQueryUsage, (err, resultQueryUsage) => {
             if (err) {
