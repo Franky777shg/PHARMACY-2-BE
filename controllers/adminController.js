@@ -309,8 +309,92 @@ module.exports = {
         res.status(200).send(resultTotalRevenSatuan[0])
         })
     },
+    getDataBoughtItemsTransaksi: (req, res) => {
+        const { month } = req.body
 
+        let getQuery = `select * from order_satuan where date like '%/${month}/2021' and status = "Complete";`
+        
+        db.query(getQuery, (err, result) => {
+            if (err) {
+                console.log(err)
+                res.status(400).send(err)
+            }
+        res.status(200).send(result)
+        })
+    },
+    getDetailDataBoughtItemsTransaksi: (req, res) => {
+        const { order_number } = req.body
 
+        let getQuery = `select * from order_detail_satuan where order_number = "${order_number}";`
 
+        db.query(getQuery, (err, result) => {
+            if (err) {
+                console.log(err)
+                res.status(400).send(err)
+            }
+        res.status(200).send(result)
+        })
+    },
+    getDataTransactionsPerUser: (req, res) => {
+        let getQuery = `select count(iduser), iduser, status from order_satuan where status = "Complete" group by iduser;`
+
+        db.query(getQuery, (err, result) => {
+            if (err) {
+                console.log(err)
+                res.status(400).send(err)
+            }
+        res.status(200).send(result)
+        })
+    },
+    getDataTransactionsPerUserById: (req, res) => {
+        let { id } = req.body
+
+        let getQuery = `select count(iduser), iduser, status from order_satuan where status = "Complete" and iduser = ${id} group by iduser;`
+
+        db.query(getQuery, (err, result) => {
+            if (err) {
+                console.log(err)
+                res.status(400).send(err)
+            }
+        res.status(200).send(result)
+        })
+    },
+    getDetailDataTransactionsPerUser: (req, res) => {
+        let getQuery = `select * from order_satuan where status = "Complete";`
+
+        db.query(getQuery, (err, result) => {
+            if (err) {
+                console.log(err)
+                res.status(400).send(err)
+            }
+        res.status(200).send(result)
+        })
+    },
+    getDetailDataTransactionsPerUserById: (req, res) => {
+        let { id } = req.body
+
+        let getQuery = `select * from order_satuan where status = "Complete" and iduser = ${id};`
+
+        db.query(getQuery, (err, result) => {
+            if (err) {
+                console.log(err)
+                res.status(400).send(err)
+            }
+        res.status(200).send(result)
+        })
+    },
+    getDataBarChart: (req, res) => {
+        let { month } = req.body
+
+        let getQuery = `select count(date) from order_satuan where date like '%/${month}/2021' and status = "Complete";`
+
+        db.query(getQuery, (err, result) => {
+            if (err) {
+                console.log(err)
+                res.status(400).send(err)
+            }
+        res.status(200).send(result[0])
+        })
+    }
 }
 

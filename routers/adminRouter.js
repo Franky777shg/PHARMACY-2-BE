@@ -19,5 +19,12 @@ router.post('/total-revjuly', adminController.totalRevResJuly)
 router.post('/satuan-july', adminController.revenueSatJuly)
 router.post('/total-satjuly', adminController.totalRevSatJuly)
 
+router.post('/getDataBoughtItemsTransaksi', adminController.getDataBoughtItemsTransaksi)
+router.post('/getDetailDataBoughtItemsTransaksi', adminController.getDetailDataBoughtItemsTransaksi)
+router.get('/getDataTransactionPerUser', adminController.getDataTransactionsPerUser)
+router.post('/getDataTransactionPerUserById', adminController.getDataTransactionsPerUserById)
+router.get('/getDetailDataTransactionPerUser', adminController.getDetailDataTransactionsPerUser)
+router.post('/getDetailDataTransactionPerUserById', adminController.getDetailDataTransactionsPerUserById)
+router.post('/getDataBarChart', adminController.getDataBarChart)
 
 module.exports = router
