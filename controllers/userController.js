@@ -78,7 +78,7 @@ module.exports = {
                         to: `${emailuser}`, //list of receivers
                         subject: `Forgot Password`, //Subject line
                         text: `Hello ${result[0].username}`, //plain text body
-                        html: `<a href="http://localhost:3000/changepw/${token}">Please click here to reset your password</a>` //html body
+                        html: `<a href="https://pharmacy-2.purwadhikafs2.com/changepw/${token}">Please click here to reset your password</a>` //html body
                     })
                     .then( res2 => {
                         console.log(res2)
@@ -157,7 +157,7 @@ module.exports = {
                         to: `${req.body.email}`, // list of receivers
                         subject: `Email Verification for ${req.body.username} ✔`, // Subject line
                         text: `Hello ${req.body.username}`, // plain text body
-                        html: `<a href="http://localhost:3000/verification/${token}" > Click here to verify Your Account</a>`, // html body
+                        html: `<a href="https://pharmacy-2.purwadhikafs2.com/verification/${token}" > Click here to verify Your Account</a>`, // html body
                     });
 
                     res.status(200).send(req.body)
